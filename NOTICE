@@ -1,0 +1,42 @@
+aba-recipe-pack
+Copyright 2026 kharchenkolab and aba-recipe-pack contributors
+
+This product includes software developed by the kharchenkolab community
+and external contributors. The whole work is licensed under the Apache
+License, Version 2.0 (see LICENSE).
+
+================================================================================
+Third-party attributions
+================================================================================
+
+Material under `recipes/biomni-derived/` and `catalog/biomni-derived/` is
+DISTILLED from the upstream Biomni project:
+
+    Biomni — General-purpose biomedical AI agent
+    Stanford SNAP Lab
+    https://github.com/snap-stanford/Biomni
+    License: Apache License, Version 2.0
+
+The mined catalogue and the per-task recipe summaries derive from Biomni's
+tool descriptions and docstrings. The procedural bodies in this repo are
+rewritten to use ABA's own libraries and conventions; Biomni's code is NOT
+imported or executed at runtime. Each derived recipe declares its upstream
+provenance in its `source:` frontmatter (e.g.
+`source: biomni:tool/genomics.py::analyze_chromatin_interactions`).
+
+If upstream Biomni distributes its own NOTICE file alongside its source,
+that NOTICE applies to this derivative work as well; the canonical copy
+lives at the URL above.
+
+================================================================================
+Other content
+================================================================================
+
+Material under `recipes/<domain>/` (i.e. NOT under
+`recipes/biomni-derived/`), `catalog/python_bio.yaml`,
+`catalog/r_bioconductor.yaml`, `knowhow/`, `CONTEXT.md`, and `policies.yaml`
+is original work of this project, also Apache 2.0 licensed.
+
+Individual recipes may reference upstream tools/packages they wrap (e.g.
+Seurat, scanpy, DESeq2, bcftools); those tools retain their own licenses
+and are NOT redistributed in this repo.
