@@ -1,0 +1,44 @@
+# Default policies the aba-recipes layer adds to the platform's defaults.
+# Merge semantics: `add:` unions, `disable:` drops, scalars highest-wins.
+# See misc/content_layers.md §5 in the platform repo.
+#
+# At L-B (extraction time) this file is mostly empty — populated in L-C
+# when policies-merge machinery lands. Documented here so authors know
+# where to put policy additions.
+
+sandbox_preinstall:
+  # Standard scientific Python stack the cookbook assumes is preinstalled
+  # in the run_python sandbox. These mirror what the platform's sandbox
+  # already pre-installs today; declared here explicitly so future
+  # platform updates can shrink the platform-side preinstall set and
+  # this layer carries the diff.
+  python:
+    add:
+      - pandas
+      - numpy
+      - scipy
+      - matplotlib
+      - seaborn
+      - scanpy
+      - anndata
+      - leidenalg
+      - igraph
+      - umap-learn
+      - statsmodels
+      - pydeseq2
+  r:
+    add:
+      - ggplot2
+      - dplyr
+      - Matrix
+      - data.table
+
+# Capabilities the recipes routinely materialize via ensure_capability().
+# These don't need to be preinstalled — they're installed on demand into
+# the materialized-library overlay (per data.md). Listed here for
+# discoverability + so `aba-overlay-status` can flag missing seeds.
+on_demand:
+  python:
+    add: []          # the catalog/ YAMLs are authoritative
+  r:
+    add: []

@@ -1,0 +1,9 @@
+# Editor/OS junk
+*.swp
+*.swo
+.DS_Store
+
+# Python (in case a recipe ships a tiny helper script)
+__pycache__/
+*.pyc
+.venv/
