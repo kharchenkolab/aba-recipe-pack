@@ -1,0 +1,31 @@
+GSM,title,patient id,tissue,cell type,disease state,status,age,Sex,ethnicity,time
+GSM5746259,MGI0369_1_SLAB-145-0,145,blood,PBMC,COVID-19,alive,70,male,African American,day 0
+GSM5746260,MGI0369_1_SLAB-145-7,145,blood,PBMC,COVID-19,alive,70,male,African American,day 7
+GSM5746261,MGI0369_1_SLAB-154-0,154,blood,PBMC,COVID-19,alive,71,male,African American,day 0
+GSM5746262,MGI0369_1_SLAB-154-7,154,blood,PBMC,COVID-19,alive,71,male,African American,day 7
+GSM5746263,MGI0369_1_SLAB-163-0,163,blood,PBMC,COVID-19,deceased,65,male,Caucasian,day 0
+GSM5746264,MGI0369_1_SLAB-163-7,163,blood,PBMC,COVID-19,deceased,65,male,Caucasian,day 7
+GSM5746265,MGI0369_1_SLAB-251-0,251,blood,PBMC,COVID-19,deceased,87,male,African American,day 0
+GSM5746266,MGI0369_1_SLAB-251-7,251,blood,PBMC,COVID-19,deceased,87,male,African American,day 7
+GSM5746267,MGI0369_1_SLAB-85-7,85,blood,PBMC,COVID-19,deceased,77,male,Caucasian,day 7
+GSM5746268,MGI0369_1_SLAB-C1-C1,control 1,blood,PBMC,control,deceased,59,male,Caucasian,NA
+GSM5746269,MGI0369_1_SLAB-C2-C2,control 2,blood,PBMC,control,control,70,female,Caucasian,NA
+GSM5746270,MGI0369_1_SLAB-C4-C4,control 4,blood,PBMC,control,control,62,female,African American,NA
+GSM5746271,MGI0369_1_SLAB-C6-C6,control 6,blood,PBMC,control,control,76,male,Caucasian,NA
+GSM5746272,MGI0369_1_SLAB-C7-C7,control 7,blood,PBMC,control,control,71,female,African American,NA
+GSM5746273,MGI0369_1_SLAB-C8-C8,control 8,blood,PBMC,control,control,82,female,African American,NA
+GSM5746274,MGI0370_1_SLAB-272-0,272,blood,PBMC,COVID-19,deceased,83,female,Caucasian,day 0
+GSM5746275,MGI0370_1_SLAB-272-7,272,blood,PBMC,COVID-19,deceased,83,female,Caucasian,day 7
+GSM5746276,MGI0370_1_SLAB-276-0,276,blood,PBMC,COVID-19,deceased,55,male,African American,day 0
+GSM5746277,MGI0370_1_SLAB-276-7,276,blood,PBMC,COVID-19,deceased,55,male,African American,day 7
+GSM5746278,MGI0370_1_SLAB-283-0,283,blood,PBMC,COVID-19,alive,52,male,Caucasian,day 0
+GSM5746279,MGI0370_1_SLAB-283-7,283,blood,PBMC,COVID-19,alive,52,male,Caucasian,day 7
+GSM5746280,MGI0370_1_SLAB-62-0,62,blood,PBMC,COVID-19,deceased,62,male,African American,day 0
+GSM5746281,MGI0370_1_SLAB-62-7,62,blood,PBMC,COVID-19,deceased,62,male,African American,day 7
+GSM5746282,MGI0370_1_SLAB-72-0,72,blood,PBMC,COVID-19,alive,68,female,African American,day 0
+GSM5746283,MGI0370_1_SLAB-72-7,72,blood,PBMC,COVID-19,alive,68,female,African American,day 7
+GSM5746284,MGI0370_1_SLAB-79-0,79,blood,PBMC,COVID-19,alive,69,female,African American,day 0
+GSM5746285,MGI0370_1_SLAB-79-7,79,blood,PBMC,COVID-19,alive,69,female,African American,day 7
+GSM5746286,MGI0370_1_SLAB-80-0,80,blood,PBMC,COVID-19,alive,88,male,Caucasian,day 0
+GSM5746287,MGI0370_1_SLAB-80-7,80,blood,PBMC,COVID-19,alive,88,male,Caucasian,day 7
+GSM5746288,MGI0370_1_SLAB-85-0,85,blood,PBMC,COVID-19,deceased,77,male,Caucasian,day 0

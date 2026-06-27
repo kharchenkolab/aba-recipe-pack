@@ -1,0 +1,16 @@
+factor_a,factor_b,pair_type,assoc,n,rank,ncol,empty_cells,flag
+disease state,time,bio×bio,0.98,30,2,3,3.0,RED
+status,time,bio×bio,0.6,30,3,4,3.0,RED
+disease state,status,bio×bio,0.87,30,4,4,2.0,AMBER
+status,Sex,bio×bio,0.4,30,4,4,0.0,GREEN
+Sex,time,bio×bio,0.24,30,3,3,0.0,GREEN
+disease state,Sex,bio×bio,0.19,30,3,3,0.0,GREEN
+age,Sex,bio×bio,0.14,30,3,3,,GREEN
+age,ethnicity,bio×bio,0.12,30,3,3,,GREEN
+status,age,bio×bio,0.08,30,4,4,,GREEN
+disease state,age,bio×bio,0.02,30,3,3,,GREEN
+age,time,bio×bio,0.02,30,3,3,,GREEN
+disease state,ethnicity,bio×bio,0.0,30,3,3,0.0,GREEN
+status,ethnicity,bio×bio,0.0,30,4,4,0.0,GREEN
+Sex,ethnicity,bio×bio,0.0,30,3,3,0.0,GREEN
+ethnicity,time,bio×bio,0.0,30,3,3,0.0,GREEN
