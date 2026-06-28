@@ -1,0 +1,79 @@
+# 10x Genomics Cell Ranger references — pre-built reference packages for the
+# 10x single-cell pipelines (gene expression, V(D)J, multiome/ATAC). Each is a
+# tarball that unpacks to a Cell Ranger reference directory (the STAR index +
+# genome.fa + genes.gtf + metadata), ready to pass as `--transcriptome` /
+# `--reference` / `--vdj`. Prefer these over building a Cell Ranger reference
+# by hand. kind: manifest → an explicit asset list (role × organism × assembly).
+#
+# Roles used here:
+#   star_index — a Cell Ranger GEX reference dir (contains a STAR index +
+#                genome.fa + genes/genes.gtf); this is what `cellranger count`
+#                wants. (We tag it star_index because that's the index it
+#                carries; the whole dir is the artifact.)
+#   vdj_ref    — a Cell Ranger V(D)J reference (for `cellranger vdj`).
+#   atac_ref   — a Cell Ranger ARC (multiome / ATAC) reference.
+# vdj_ref / atac_ref are NOT in NAMING.md's core vocabulary (deliberate
+# extension) — resolve_asset matches role purely by normalized string equality,
+# so a caller must ask for these exact slugs to get them.
+#
+# Filenames verified 2026-06-28. To bump: change the dated/versioned filename
+# (e.g. refdata-gex-GRCh38-2024-A) + the `version` tag; the host path prefix is
+# stable (cell-exp / cell-vdj / cell-atac under cf.10xgenomics.com/supp/).
+provider: tenx-cellranger
+description: 10x Genomics Cell Ranger pre-built references (GEX / VDJ / ATAC) as ready dirs.
+kind: manifest
+homepage: https://www.10xgenomics.com/support/software/cell-ranger/downloads
+assets:
+  # ── Gene Expression (cellranger count) ──────────────────────────────────
+  - role: star_index
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: refdata-gex-GRCh38-2024-A
+    url: https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2024-A.tar.gz
+    unpack: tar.gz
+  - role: star_index
+    organism: homo_sapiens
+    assembly: GRCh38-2020-A
+    version: refdata-gex-GRCh38-2020-A
+    url: https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz
+    unpack: tar.gz
+  - role: star_index
+    organism: mus_musculus
+    assembly: GRCm39
+    version: refdata-gex-GRCm39-2024-A
+    url: https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCm39-2024-A.tar.gz
+    unpack: tar.gz
+  - role: star_index
+    organism: mus_musculus
+    assembly: mm10
+    version: refdata-gex-mm10-2020-A
+    url: https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-mm10-2020-A.tar.gz
+    unpack: tar.gz
+
+  # ── V(D)J (cellranger vdj) ──────────────────────────────────────────────
+  - role: vdj_ref
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: refdata-cellranger-vdj-GRCh38-alts-ensembl-7.1.0
+    url: https://cf.10xgenomics.com/supp/cell-vdj/refdata-cellranger-vdj-GRCh38-alts-ensembl-7.1.0.tar.gz
+    unpack: tar.gz
+  - role: vdj_ref
+    organism: mus_musculus
+    assembly: GRCm38
+    version: refdata-cellranger-vdj-GRCm38-alts-ensembl-7.0.0
+    url: https://cf.10xgenomics.com/supp/cell-vdj/refdata-cellranger-vdj-GRCm38-alts-ensembl-7.0.0.tar.gz
+    unpack: tar.gz
+
+  # ── Multiome / ATAC (cellranger-arc / cellranger-atac) ──────────────────
+  - role: atac_ref
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: refdata-cellranger-arc-GRCh38-2020-A-2.0.0
+    url: https://cf.10xgenomics.com/supp/cell-atac/refdata-cellranger-arc-GRCh38-2020-A-2.0.0.tar.gz
+    unpack: tar.gz
+  - role: atac_ref
+    organism: mus_musculus
+    assembly: mm10
+    version: refdata-cellranger-arc-mm10-2020-A-2.0.0
+    url: https://cf.10xgenomics.com/supp/cell-atac/refdata-cellranger-arc-mm10-2020-A-2.0.0.tar.gz
+    unpack: tar.gz
