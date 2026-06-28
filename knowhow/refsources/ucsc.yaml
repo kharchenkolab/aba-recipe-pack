@@ -1,0 +1,115 @@
+# UCSC goldenPath — assembly FASTA (.fa.gz) and the packed 2bit (.2bit) for the
+# UCSC-named assemblies. The natural source when a tool or track wants the UCSC
+# `chr`-prefixed naming (hg38, mm10, …) rather than Ensembl/NCBI contig names.
+# kind: manifest → an explicit asset list (role × organism × assembly → url).
+#
+# The `genome` role is the gzipped multi-FASTA (`{db}.fa.gz`); the `twobit` role
+# is the same sequence in UCSC's compact random-access 2bit format
+# (`{db}.2bit`, used by blat / bigWig tooling — NOT gzipped, so no `unpack`).
+#
+# Assembly = UCSC db name. To add an assembly, point at
+#   https://hgdownload.soe.ucsc.edu/goldenPath/{db}/bigZips/{db}.fa.gz
+# and confirm the db exists (older assemblies sometimes nest bigZips/latest/).
+# UCSC db ↔ canonical assembly: hg38=GRCh38, hg19=GRCh37, mm39=GRCm39,
+# mm10=GRCm38, rn7=mRatBN7.2, danRer11=GRCz11, dm6=BDGP6, ce11=WBcel235,
+# sacCer3=R64.
+provider: ucsc
+description: UCSC goldenPath assembly FASTA (.fa.gz) + 2bit, by UCSC db name.
+kind: manifest
+homepage: https://hgdownload.soe.ucsc.edu/downloads.html
+assets:
+  # ── Human ───────────────────────────────────────────────────────────────
+  - role: genome
+    organism: homo_sapiens
+    assembly: hg38
+    version: ucsc-hg38
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz
+  - role: twobit
+    organism: homo_sapiens
+    assembly: hg38
+    version: ucsc-hg38
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit
+  - role: genome
+    organism: homo_sapiens
+    assembly: hg19
+    version: ucsc-hg19
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz
+  - role: twobit
+    organism: homo_sapiens
+    assembly: hg19
+    version: ucsc-hg19
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.2bit
+
+  # ── Mouse ───────────────────────────────────────────────────────────────
+  - role: genome
+    organism: mus_musculus
+    assembly: mm39
+    version: ucsc-mm39
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/mm39/bigZips/mm39.fa.gz
+  - role: twobit
+    organism: mus_musculus
+    assembly: mm39
+    version: ucsc-mm39
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/mm39/bigZips/mm39.2bit
+  - role: genome
+    organism: mus_musculus
+    assembly: mm10
+    version: ucsc-mm10
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/mm10.fa.gz
+  - role: twobit
+    organism: mus_musculus
+    assembly: mm10
+    version: ucsc-mm10
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/mm10.2bit
+
+  # ── Rat / Zebrafish / Fly / Worm / Yeast ────────────────────────────────
+  - role: genome
+    organism: rattus_norvegicus
+    assembly: rn7
+    version: ucsc-rn7
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/rn7/bigZips/rn7.fa.gz
+  - role: twobit
+    organism: rattus_norvegicus
+    assembly: rn7
+    version: ucsc-rn7
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/rn7/bigZips/rn7.2bit
+  - role: genome
+    organism: danio_rerio
+    assembly: danRer11
+    version: ucsc-danRer11
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/danRer11/bigZips/danRer11.fa.gz
+  - role: twobit
+    organism: danio_rerio
+    assembly: danRer11
+    version: ucsc-danRer11
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/danRer11/bigZips/danRer11.2bit
+  - role: genome
+    organism: drosophila_melanogaster
+    assembly: dm6
+    version: ucsc-dm6
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/dm6/bigZips/dm6.fa.gz
+  - role: twobit
+    organism: drosophila_melanogaster
+    assembly: dm6
+    version: ucsc-dm6
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/dm6/bigZips/dm6.2bit
+  - role: genome
+    organism: caenorhabditis_elegans
+    assembly: ce11
+    version: ucsc-ce11
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/ce11/bigZips/ce11.fa.gz
+  - role: twobit
+    organism: caenorhabditis_elegans
+    assembly: ce11
+    version: ucsc-ce11
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/ce11/bigZips/ce11.2bit
+  - role: genome
+    organism: saccharomyces_cerevisiae
+    assembly: sacCer3
+    version: ucsc-sacCer3
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/sacCer3/bigZips/sacCer3.fa.gz
+  - role: twobit
+    organism: saccharomyces_cerevisiae
+    assembly: sacCer3
+    version: ucsc-sacCer3
+    url: https://hgdownload.soe.ucsc.edu/goldenPath/sacCer3/bigZips/sacCer3.2bit

@@ -1,0 +1,61 @@
+# GENCODE — the gold-standard human + mouse gene annotation (the reference
+# annotation for ENCODE / most human + mouse RNA-seq pipelines).
+# kind: manifest → an explicit asset list (role × organism × assembly → url).
+#
+# Releases (verified 2026-06-28): human release_50 (GRCh38), mouse release_M39
+# (GRCm39). Human releases are integers (v50); mouse releases are M-prefixed
+# (vM39). The genome FASTA distributed here is GENCODE's repackaging of the
+# primary assembly (soft-masked toplevel without ALT/patch scaffolds).
+#
+# To bump a release: change the release number in BOTH the directory segment
+# (release_50 / release_M39) and the filename infix (v50 / vM39), and update
+# the `version` tag. The assembly (GRCh38 / GRCm39) is stable across recent
+# releases.
+provider: gencode
+description: GENCODE gold-standard human + mouse annotation (GTF/GFF3) + transcript/genome FASTA.
+kind: manifest
+homepage: https://www.gencodegenes.org/
+assets:
+  # ── Human / GRCh38 (release 50) ─────────────────────────────────────────
+  - role: gtf
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: gencode-v50
+    url: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_50/gencode.v50.annotation.gtf.gz
+  - role: gff
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: gencode-v50
+    url: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_50/gencode.v50.annotation.gff3.gz
+  - role: transcriptome
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: gencode-v50
+    url: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_50/gencode.v50.transcripts.fa.gz
+  - role: genome
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: gencode-v50
+    url: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_50/GRCh38.primary_assembly.genome.fa.gz
+
+  # ── Mouse / GRCm39 (release M39) ────────────────────────────────────────
+  - role: gtf
+    organism: mus_musculus
+    assembly: GRCm39
+    version: gencode-vM39
+    url: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M39/gencode.vM39.annotation.gtf.gz
+  - role: gff
+    organism: mus_musculus
+    assembly: GRCm39
+    version: gencode-vM39
+    url: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M39/gencode.vM39.annotation.gff3.gz
+  - role: transcriptome
+    organism: mus_musculus
+    assembly: GRCm39
+    version: gencode-vM39
+    url: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M39/gencode.vM39.transcripts.fa.gz
+  - role: genome
+    organism: mus_musculus
+    assembly: GRCm39
+    version: gencode-vM39
+    url: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M39/GRCm39.primary_assembly.genome.fa.gz

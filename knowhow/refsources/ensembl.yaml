@@ -1,0 +1,230 @@
+# Ensembl FTP — genome FASTA + annotation for vertebrates, and (via the
+# Ensembl Genomes / EBI mirrors) selected invertebrate / fungal / plant species.
+# kind: manifest → an explicit asset list (role × organism × assembly → url).
+#
+# Release notes (verified 2026-06-28):
+#   - Vertebrates (human, mouse, rat, zebrafish) are on the main Ensembl
+#     vertebrate release 116. Their annotation files carry "116" in the name.
+#   - Human + mouse genomes use `.dna.primary_assembly.` (no haplotype/patch
+#     scaffolds); all other species use `.dna.toplevel.`.
+#   - Invertebrates / fungi (fly, worm, yeast) ship on the Ensembl *Genomes*
+#     release cadence even on ftp.ensembl.org — their annotation carries "63"
+#     in the name (NOT 116). FASTA files (genome/cdna/cds/pep) never carry the
+#     release number, only the assembly, so those are release-agnostic.
+#   - Arabidopsis is served from Ensembl Plants via the EBI mirror
+#     (ftp.ebi.ac.uk/ensemblgenomes/pub/plants/release-63), assembly TAIR10.
+#
+# To bump a release: change the release number in the `version` tag AND in the
+# URLs (the directory segment `release-N` and, for gtf/gff, the `.N.` infix).
+# Re-verify the assembly string — Ensembl re-bases assemblies between releases
+# (rat moved mRatBN7.2 → GRCr8; fly BDGP6.32 → BDGP6.54).
+provider: ensembl
+description: Ensembl genome FASTA (dna/cdna/cds/pep) + GTF/GFF3 annotation.
+kind: manifest
+homepage: https://www.ensembl.org/info/data/ftp/index.html
+assets:
+  # ── Homo sapiens / GRCh38 (release 116) ─────────────────────────────────
+  - role: genome
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+  - role: transcriptome
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz
+  - role: cds
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/fasta/homo_sapiens/cds/Homo_sapiens.GRCh38.cds.all.fa.gz
+  - role: protein
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/fasta/homo_sapiens/pep/Homo_sapiens.GRCh38.pep.all.fa.gz
+  - role: gtf
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/gtf/homo_sapiens/Homo_sapiens.GRCh38.116.gtf.gz
+  - role: gff
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/gff3/homo_sapiens/Homo_sapiens.GRCh38.116.gff3.gz
+
+  # ── Mus musculus / GRCm39 (release 116) ─────────────────────────────────
+  - role: genome
+    organism: mus_musculus
+    assembly: GRCm39
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/fasta/mus_musculus/dna/Mus_musculus.GRCm39.dna.primary_assembly.fa.gz
+  - role: transcriptome
+    organism: mus_musculus
+    assembly: GRCm39
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/fasta/mus_musculus/cdna/Mus_musculus.GRCm39.cdna.all.fa.gz
+  - role: cds
+    organism: mus_musculus
+    assembly: GRCm39
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/fasta/mus_musculus/cds/Mus_musculus.GRCm39.cds.all.fa.gz
+  - role: protein
+    organism: mus_musculus
+    assembly: GRCm39
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/fasta/mus_musculus/pep/Mus_musculus.GRCm39.pep.all.fa.gz
+  - role: gtf
+    organism: mus_musculus
+    assembly: GRCm39
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/gtf/mus_musculus/Mus_musculus.GRCm39.116.gtf.gz
+  - role: gff
+    organism: mus_musculus
+    assembly: GRCm39
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/gff3/mus_musculus/Mus_musculus.GRCm39.116.gff3.gz
+
+  # ── Rattus norvegicus / GRCr8 (release 116; was mRatBN7.2 pre-r114) ──────
+  - role: genome
+    organism: rattus_norvegicus
+    assembly: GRCr8
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/fasta/rattus_norvegicus/dna/Rattus_norvegicus.GRCr8.dna.toplevel.fa.gz
+  - role: transcriptome
+    organism: rattus_norvegicus
+    assembly: GRCr8
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/fasta/rattus_norvegicus/cdna/Rattus_norvegicus.GRCr8.cdna.all.fa.gz
+  - role: gtf
+    organism: rattus_norvegicus
+    assembly: GRCr8
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/gtf/rattus_norvegicus/Rattus_norvegicus.GRCr8.116.gtf.gz
+  - role: gff
+    organism: rattus_norvegicus
+    assembly: GRCr8
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/gff3/rattus_norvegicus/Rattus_norvegicus.GRCr8.116.gff3.gz
+
+  # ── Danio rerio / GRCz11 (release 116) ──────────────────────────────────
+  - role: genome
+    organism: danio_rerio
+    assembly: GRCz11
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/fasta/danio_rerio/dna/Danio_rerio.GRCz11.dna.toplevel.fa.gz
+  - role: transcriptome
+    organism: danio_rerio
+    assembly: GRCz11
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/fasta/danio_rerio/cdna/Danio_rerio.GRCz11.cdna.all.fa.gz
+  - role: gtf
+    organism: danio_rerio
+    assembly: GRCz11
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/gtf/danio_rerio/Danio_rerio.GRCz11.116.gtf.gz
+  - role: gff
+    organism: danio_rerio
+    assembly: GRCz11
+    version: ensembl-116
+    url: https://ftp.ensembl.org/pub/release-116/gff3/danio_rerio/Danio_rerio.GRCz11.116.gff3.gz
+
+  # ── Drosophila melanogaster / BDGP6.54 (Ensembl Metazoa release 63) ──────
+  - role: genome
+    organism: drosophila_melanogaster
+    assembly: BDGP6.54
+    version: ensembl-genomes-63
+    url: https://ftp.ensembl.org/pub/release-116/fasta/drosophila_melanogaster/dna/Drosophila_melanogaster.BDGP6.54.dna.toplevel.fa.gz
+  - role: transcriptome
+    organism: drosophila_melanogaster
+    assembly: BDGP6.54
+    version: ensembl-genomes-63
+    url: https://ftp.ensembl.org/pub/release-116/fasta/drosophila_melanogaster/cdna/Drosophila_melanogaster.BDGP6.54.cdna.all.fa.gz
+  - role: gtf
+    organism: drosophila_melanogaster
+    assembly: BDGP6.54
+    version: ensembl-genomes-63
+    url: https://ftp.ensembl.org/pub/release-116/gtf/drosophila_melanogaster/Drosophila_melanogaster.BDGP6.54.63.gtf.gz
+  - role: gff
+    organism: drosophila_melanogaster
+    assembly: BDGP6.54
+    version: ensembl-genomes-63
+    url: https://ftp.ensembl.org/pub/release-116/gff3/drosophila_melanogaster/Drosophila_melanogaster.BDGP6.54.63.gff3.gz
+
+  # ── Caenorhabditis elegans / WBcel235 (Ensembl Metazoa release 63) ──────
+  - role: genome
+    organism: caenorhabditis_elegans
+    assembly: WBcel235
+    version: ensembl-genomes-63
+    url: https://ftp.ensembl.org/pub/release-116/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz
+  - role: transcriptome
+    organism: caenorhabditis_elegans
+    assembly: WBcel235
+    version: ensembl-genomes-63
+    url: https://ftp.ensembl.org/pub/release-116/fasta/caenorhabditis_elegans/cdna/Caenorhabditis_elegans.WBcel235.cdna.all.fa.gz
+  - role: gtf
+    organism: caenorhabditis_elegans
+    assembly: WBcel235
+    version: ensembl-genomes-63
+    url: https://ftp.ensembl.org/pub/release-116/gtf/caenorhabditis_elegans/Caenorhabditis_elegans.WBcel235.63.gtf.gz
+  - role: gff
+    organism: caenorhabditis_elegans
+    assembly: WBcel235
+    version: ensembl-genomes-63
+    url: https://ftp.ensembl.org/pub/release-116/gff3/caenorhabditis_elegans/Caenorhabditis_elegans.WBcel235.63.gff3.gz
+
+  # ── Saccharomyces cerevisiae / R64-1-1 (Ensembl Fungi release 63) ───────
+  - role: genome
+    organism: saccharomyces_cerevisiae
+    assembly: R64-1-1
+    version: ensembl-genomes-63
+    url: https://ftp.ensembl.org/pub/release-116/fasta/saccharomyces_cerevisiae/dna/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.gz
+  - role: transcriptome
+    organism: saccharomyces_cerevisiae
+    assembly: R64-1-1
+    version: ensembl-genomes-63
+    url: https://ftp.ensembl.org/pub/release-116/fasta/saccharomyces_cerevisiae/cdna/Saccharomyces_cerevisiae.R64-1-1.cdna.all.fa.gz
+  - role: gtf
+    organism: saccharomyces_cerevisiae
+    assembly: R64-1-1
+    version: ensembl-genomes-63
+    url: https://ftp.ensembl.org/pub/release-116/gtf/saccharomyces_cerevisiae/Saccharomyces_cerevisiae.R64-1-1.63.gtf.gz
+  - role: gff
+    organism: saccharomyces_cerevisiae
+    assembly: R64-1-1
+    version: ensembl-genomes-63
+    url: https://ftp.ensembl.org/pub/release-116/gff3/saccharomyces_cerevisiae/Saccharomyces_cerevisiae.R64-1-1.63.gff3.gz
+
+  # ── Arabidopsis thaliana / TAIR10 (Ensembl Plants r63, EBI mirror) ──────
+  - role: genome
+    organism: arabidopsis_thaliana
+    assembly: TAIR10
+    version: ensembl-plants-63
+    url: https://ftp.ebi.ac.uk/ensemblgenomes/pub/plants/release-63/fasta/arabidopsis_thaliana/dna/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.gz
+  - role: transcriptome
+    organism: arabidopsis_thaliana
+    assembly: TAIR10
+    version: ensembl-plants-63
+    url: https://ftp.ebi.ac.uk/ensemblgenomes/pub/plants/release-63/fasta/arabidopsis_thaliana/cdna/Arabidopsis_thaliana.TAIR10.cdna.all.fa.gz
+  - role: cds
+    organism: arabidopsis_thaliana
+    assembly: TAIR10
+    version: ensembl-plants-63
+    url: https://ftp.ebi.ac.uk/ensemblgenomes/pub/plants/release-63/fasta/arabidopsis_thaliana/cds/Arabidopsis_thaliana.TAIR10.cds.all.fa.gz
+  - role: protein
+    organism: arabidopsis_thaliana
+    assembly: TAIR10
+    version: ensembl-plants-63
+    url: https://ftp.ebi.ac.uk/ensemblgenomes/pub/plants/release-63/fasta/arabidopsis_thaliana/pep/Arabidopsis_thaliana.TAIR10.pep.all.fa.gz
+  - role: gtf
+    organism: arabidopsis_thaliana
+    assembly: TAIR10
+    version: ensembl-plants-63
+    url: https://ftp.ebi.ac.uk/ensemblgenomes/pub/plants/release-63/gtf/arabidopsis_thaliana/Arabidopsis_thaliana.TAIR10.63.gtf.gz
+  - role: gff
+    organism: arabidopsis_thaliana
+    assembly: TAIR10
+    version: ensembl-plants-63
+    url: https://ftp.ebi.ac.uk/ensemblgenomes/pub/plants/release-63/gff3/arabidopsis_thaliana/Arabidopsis_thaliana.TAIR10.63.gff3.gz

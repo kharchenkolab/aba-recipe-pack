@@ -1,0 +1,38 @@
+# NCBI Datasets — genome assemblies + annotation by accession.
+# https://www.ncbi.nlm.nih.gov/datasets/
+# kind: template → parametric resolution from an accession (no fixed asset
+# list). resolve_asset(role, accession=..., filename=...) looks up `role` in
+# roles{}, then `.format(**{accession, filename, **roles[role]})` into
+# `command`. The executor returns the resolved `datasets` invocation; the agent
+# runs it via run_python (the CLI isn't auto-run), then registers the result
+# with the recorded re-runnable spec.
+#
+# This LAYERS OVER the built-in `ncbi` seed (same provider name), extending the
+# role set (adds `transcriptome` → rna, and `seq_report`). The template branch
+# only receives {accession, filename} + the per-role params — NOT
+# organism/assembly — so NCBI is accession-driven by design. Map a species to
+# its assembly accession first, e.g.:
+#   GCF_000001405.40  human   GRCh38.p14   (RefSeq)
+#   GCF_000001635.27  mouse   GRCm39       (RefSeq)
+#   GCF_036323735.1   rat     GRCr8        (RefSeq)
+#   GCF_000002035.6   zebrafish GRCz11     (RefSeq)
+#   GCF_000001215.4   fly     Release 6 plus ISO1 MT (RefSeq)
+#   GCF_000002985.6   worm    WBcel235     (RefSeq)
+#   GCF_000146045.2   yeast   R64          (RefSeq)
+#   GCF_000001735.4   arabidopsis TAIR10.1 (RefSeq)
+# GCF_ = RefSeq (curated), GCA_ = GenBank (submitter). `datasets` --include
+# accepts: genome, gtf, gff3, rna, cds, protein, seq-report.
+provider: ncbi
+description: NCBI Datasets genome/annotation download by assembly accession (CLI template).
+kind: template
+homepage: https://www.ncbi.nlm.nih.gov/datasets/
+command: "datasets download genome accession {accession} --include {include} --filename {filename}"
+unpack: zip
+roles:
+  genome: {include: genome}
+  gtf: {include: gtf}
+  gff: {include: gff3}
+  cds: {include: cds}
+  protein: {include: protein}
+  transcriptome: {include: rna}
+  seq_report: {include: seq-report}

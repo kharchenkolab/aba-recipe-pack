@@ -1,0 +1,62 @@
+# Illumina iGenomes (as mirrored for nf-core on AWS S3) — a uniform per-build
+# tree: Sequence/WholeGenomeFasta/genome.fa, Annotation/Genes/genes.gtf, and
+# pre-built index dirs (Bowtie2Index/, STARIndex/, BismarkIndex/, …).
+# kind: manifest → an explicit asset list (role × organism × assembly → url).
+#
+# IMPORTANT — single-file assets ONLY. iGenomes' index entries (Bowtie2Index/,
+# STARIndex/, …) are DIRECTORIES, not single downloadable files, so they cannot
+# be expressed as one `url` here. Fetch an index by syncing its S3 prefix (e.g.
+# `aws s3 cp --recursive --no-sign-request
+# s3://ngi-igenomes/igenomes/Homo_sapiens/Ensembl/GRCh38/Sequence/Bowtie2Index/ .`)
+# and register the dir; or prefer aws-indexes / 10x for a single-archive index.
+# This file therefore exposes only the two single-file roles: `genome`
+# (WholeGenomeFasta/genome.fa, uncompressed → no `unpack`) and `gtf`
+# (Annotation/Genes/genes.gtf, uncompressed → no `unpack`).
+#
+# Host = the nf-core public mirror (no-sign-request S3 over HTTPS,
+# eu-west-1). Path scheme:
+#   {S3}/igenomes/<Organism>/<Source>/<Build>/Sequence/WholeGenomeFasta/genome.fa
+#   {S3}/igenomes/<Organism>/<Source>/<Build>/Annotation/Genes/genes.gtf
+# <Source> ∈ {Ensembl, NCBI, UCSC}; <Build> is that source's build name. The
+# `assembly` facet here is the iGenomes Build; `version` records Source/Build so
+# provenance is unambiguous. Note iGenomes is a FROZEN snapshot (not tracking
+# current Ensembl/GENCODE) — use it for reproducing iGenomes-based pipelines;
+# for current annotation prefer ensembl/gencode.
+provider: igenomes
+description: Illumina/nf-core iGenomes single-file genome FASTA + GTF (index dirs excluded; they are directories).
+kind: manifest
+homepage: https://ewels.github.io/AWS-iGenomes/
+assets:
+  # ── Human ───────────────────────────────────────────────────────────────
+  - role: genome
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: igenomes-NCBI-GRCh38
+    url: https://ngi-igenomes.s3.eu-west-1.amazonaws.com/igenomes/Homo_sapiens/NCBI/GRCh38/Sequence/WholeGenomeFasta/genome.fa
+  - role: gtf
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: igenomes-NCBI-GRCh38
+    url: https://ngi-igenomes.s3.eu-west-1.amazonaws.com/igenomes/Homo_sapiens/NCBI/GRCh38/Annotation/Genes/genes.gtf
+  - role: genome
+    organism: homo_sapiens
+    assembly: GRCh37
+    version: igenomes-Ensembl-GRCh37
+    url: https://ngi-igenomes.s3.eu-west-1.amazonaws.com/igenomes/Homo_sapiens/Ensembl/GRCh37/Sequence/WholeGenomeFasta/genome.fa
+  - role: gtf
+    organism: homo_sapiens
+    assembly: GRCh37
+    version: igenomes-Ensembl-GRCh37
+    url: https://ngi-igenomes.s3.eu-west-1.amazonaws.com/igenomes/Homo_sapiens/Ensembl/GRCh37/Annotation/Genes/genes.gtf
+
+  # ── Mouse ───────────────────────────────────────────────────────────────
+  - role: genome
+    organism: mus_musculus
+    assembly: GRCm38
+    version: igenomes-Ensembl-GRCm38
+    url: https://ngi-igenomes.s3.eu-west-1.amazonaws.com/igenomes/Mus_musculus/Ensembl/GRCm38/Sequence/WholeGenomeFasta/genome.fa
+  - role: gtf
+    organism: mus_musculus
+    assembly: GRCm38
+    version: igenomes-Ensembl-GRCm38
+    url: https://ngi-igenomes.s3.eu-west-1.amazonaws.com/igenomes/Mus_musculus/Ensembl/GRCm38/Annotation/Genes/genes.gtf

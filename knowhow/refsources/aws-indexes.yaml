@@ -1,0 +1,197 @@
+# Pre-built aligner indices mirrored on public AWS S3 by the Langmead lab.
+# https://benlangmead.github.io/aws-indexes/
+# kind: manifest → an explicit asset list (role × organism × assembly → url).
+#
+# This is the COMPREHENSIVE superset that LAYERS OVER the built-in seed of the
+# same provider name (`aws-indexes`). Because load_providers() is first-match-
+# wins by provider name and $ABA_REFSOURCES_DIR is searched before the built-in
+# seed, shipping this file fully replaces the 3-asset seed.
+#
+# Archive layout (verified 2026-06-28 from the S3 bucket listing):
+#   Bowtie2:  https://genome-idx.s3.amazonaws.com/bt/<NAME>.zip       (unpack: zip)
+#   HISAT2:   https://genome-idx.s3.amazonaws.com/hisat/<NAME>.tar.gz (unpack: tar.gz)
+# The <NAME> is the index basename as published, NOT the assembly slug — keep
+# the published name in `version` so the provenance points back at the exact
+# archive (e.g. bowtie2 human is `GRCh38_noalt_as`, hisat2 human is
+# `grch38_genome`).
+#
+# NOTE on bowtie_index (bowtie1) / star_index / salmon_index / bwa_index:
+#   This bucket publishes Bowtie2 (bt/) and HISAT2 (hisat/) indices (plus
+#   classifier indices like kraken/centrifuge, out of scope). It does NOT carry
+#   a general Bowtie1, STAR, salmon, or BWA index set, so those roles are not
+#   provided here — fetch a FASTA (ensembl/ucsc/gencode) and build, or use a
+#   per-tool provider. For STAR/salmon, 10x/iGenomes ship some (iGenomes index
+#   dirs are directories — see igenomes.yaml).
+provider: aws-indexes
+description: Pre-built Bowtie2 + HISAT2 aligner indices on public AWS S3 (Langmead lab).
+kind: manifest
+homepage: https://benlangmead.github.io/aws-indexes/
+assets:
+  # ── Bowtie2 (bt/*.zip) ──────────────────────────────────────────────────
+  # Human
+  - role: bowtie2_index
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: GRCh38_noalt_as
+    url: https://genome-idx.s3.amazonaws.com/bt/GRCh38_noalt_as.zip
+    unpack: zip
+  - role: bowtie2_index
+    organism: homo_sapiens
+    assembly: GRCh37
+    version: GRCh37
+    url: https://genome-idx.s3.amazonaws.com/bt/GRCh37.zip
+    unpack: zip
+  - role: bowtie2_index
+    organism: homo_sapiens
+    assembly: hg19
+    version: hg19
+    url: https://genome-idx.s3.amazonaws.com/bt/hg19.zip
+    unpack: zip
+  - role: bowtie2_index
+    organism: homo_sapiens
+    assembly: T2T-CHM13v2.0
+    version: chm13v2.0
+    url: https://genome-idx.s3.amazonaws.com/bt/chm13v2.0.zip
+    unpack: zip
+  # Mouse
+  - role: bowtie2_index
+    organism: mus_musculus
+    assembly: GRCm39
+    version: GRCm39
+    url: https://genome-idx.s3.amazonaws.com/bt/GRCm39.zip
+    unpack: zip
+  - role: bowtie2_index
+    organism: mus_musculus
+    assembly: GRCm38
+    version: GRCm38
+    url: https://genome-idx.s3.amazonaws.com/bt/GRCm38.zip
+    unpack: zip
+  - role: bowtie2_index
+    organism: mus_musculus
+    assembly: mm10
+    version: mm10
+    url: https://genome-idx.s3.amazonaws.com/bt/mm10.zip
+    unpack: zip
+  # Rat
+  - role: bowtie2_index
+    organism: rattus_norvegicus
+    assembly: GRCr8
+    version: GRCr8
+    url: https://genome-idx.s3.amazonaws.com/bt/GRCr8.zip
+    unpack: zip
+  - role: bowtie2_index
+    organism: rattus_norvegicus
+    assembly: Rnor_6.0
+    version: Rnor_6.0
+    url: https://genome-idx.s3.amazonaws.com/bt/Rnor_6.0.zip
+    unpack: zip
+  # Zebrafish
+  - role: bowtie2_index
+    organism: danio_rerio
+    assembly: GRCz11
+    version: GRCz11
+    url: https://genome-idx.s3.amazonaws.com/bt/GRCz11.zip
+    unpack: zip
+  - role: bowtie2_index
+    organism: danio_rerio
+    assembly: GRCz10
+    version: GRCz10
+    url: https://genome-idx.s3.amazonaws.com/bt/GRCz10.zip
+    unpack: zip
+  # Fly
+  - role: bowtie2_index
+    organism: drosophila_melanogaster
+    assembly: BDGP6
+    version: BDGP6
+    url: https://genome-idx.s3.amazonaws.com/bt/BDGP6.zip
+    unpack: zip
+  # Worm
+  - role: bowtie2_index
+    organism: caenorhabditis_elegans
+    assembly: WBcel235
+    version: WBcel235
+    url: https://genome-idx.s3.amazonaws.com/bt/WBcel235.zip
+    unpack: zip
+  # Yeast
+  - role: bowtie2_index
+    organism: saccharomyces_cerevisiae
+    assembly: R64-1-1
+    version: R64-1-1
+    url: https://genome-idx.s3.amazonaws.com/bt/R64-1-1.zip
+    unpack: zip
+  # Arabidopsis
+  - role: bowtie2_index
+    organism: arabidopsis_thaliana
+    assembly: TAIR10
+    version: TAIR10
+    url: https://genome-idx.s3.amazonaws.com/bt/TAIR10.zip
+    unpack: zip
+
+  # ── HISAT2 (hisat/*.tar.gz) ─────────────────────────────────────────────
+  # The published HISAT2 set is genome-only "*_genome" archives plus a few
+  # bare-assembly ones; it covers fewer species than Bowtie2.
+  # Human
+  - role: hisat2_index
+    organism: homo_sapiens
+    assembly: GRCh38
+    version: grch38_genome
+    url: https://genome-idx.s3.amazonaws.com/hisat/grch38_genome.tar.gz
+    unpack: tar.gz
+  - role: hisat2_index
+    organism: homo_sapiens
+    assembly: hg38
+    version: hg38_genome
+    url: https://genome-idx.s3.amazonaws.com/hisat/hg38_genome.tar.gz
+    unpack: tar.gz
+  - role: hisat2_index
+    organism: homo_sapiens
+    assembly: GRCh37
+    version: grch37_genome
+    url: https://genome-idx.s3.amazonaws.com/hisat/grch37_genome.tar.gz
+    unpack: tar.gz
+  - role: hisat2_index
+    organism: homo_sapiens
+    assembly: hg19
+    version: hg19_genome
+    url: https://genome-idx.s3.amazonaws.com/hisat/hg19_genome.tar.gz
+    unpack: tar.gz
+  # Mouse
+  - role: hisat2_index
+    organism: mus_musculus
+    assembly: GRCm38
+    version: grcm38_genome
+    url: https://genome-idx.s3.amazonaws.com/hisat/grcm38_genome.tar.gz
+    unpack: tar.gz
+  - role: hisat2_index
+    organism: mus_musculus
+    assembly: mm10
+    version: mm10_genome
+    url: https://genome-idx.s3.amazonaws.com/hisat/mm10_genome.tar.gz
+    unpack: tar.gz
+  # Rat
+  - role: hisat2_index
+    organism: rattus_norvegicus
+    assembly: Rnor_6.0
+    version: rn6_genome
+    url: https://genome-idx.s3.amazonaws.com/hisat/rn6_genome.tar.gz
+    unpack: tar.gz
+  # Fly
+  - role: hisat2_index
+    organism: drosophila_melanogaster
+    assembly: dm6
+    version: dm6
+    url: https://genome-idx.s3.amazonaws.com/hisat/dm6.tar.gz
+    unpack: tar.gz
+  - role: hisat2_index
+    organism: drosophila_melanogaster
+    assembly: BDGP6
+    version: bdgp6
+    url: https://genome-idx.s3.amazonaws.com/hisat/bdgp6.tar.gz
+    unpack: tar.gz
+  # Worm
+  - role: hisat2_index
+    organism: caenorhabditis_elegans
+    assembly: WBcel235
+    version: wbcel235
+    url: https://genome-idx.s3.amazonaws.com/hisat/wbcel235.tar.gz
+    unpack: tar.gz
