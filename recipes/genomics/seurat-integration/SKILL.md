@@ -81,6 +81,22 @@ suppressPackageStartupMessages({
 })
 ```
 
+**Parallelism (`future`).** ABA defaults R `future` to **sequential** with a
+generous `future.globals.maxSize`, so `IntegrateLayers` won't hit future's 500 MiB
+globals cap on real data (the classic *"total size of globals exceeds the maximum
+allowed size"* error — IntegrateLayers ships the layered object to workers). Most
+runs should stay sequential. **To opt into parallelism** (large object, and you
+were allocated multiple cores — CCA/RPCA anchor-finding benefits most):
+
+```r
+future::plan("multicore", workers = 4)   # N = cores allocated; needs RAM × workers
+# … IntegrateLayers(...) …
+future::plan("sequential")               # revert afterwards
+```
+
+The globals cap is already raised by ABA, so opting in won't trip it; if you ever
+see the cap error anyway, `options(future.globals.maxSize = 8 * 1024^3)`.
+
 Optional per-method dependencies — install ONLY if the user picks that
 branch. For full per-method install + tradeoffs see
 `references/integration_methods.md`.
