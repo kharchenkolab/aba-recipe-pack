@@ -30,21 +30,32 @@ chain — heatmaps render via `sccore`'s native grid engine.
    cells), one per sample. Ensure cell names are globally unique across
    samples (prefix by sample id) — `any(duplicated(unlist(lapply(panel, colnames))))`
    must be FALSE.
-2. Preprocess each sample. With **pagoda2 2.0** (R6 + `method=` vocabulary):
+2. Preprocess each sample into a `Pagoda2` object with a PCA reduction. **pagoda2 has
+   two API generations and this recipe supports BOTH** — 2.0 (`devel`) and 1.x
+   (CRAN/`main`) — which construct differently; a snippet for one ERRORS on the other
+   (`Pagoda2$from` / `$run()` don't exist on 1.x → "attempt to apply non-function").
+   Detect the flavor once and route. conos 2.0 reads counts from either flavor
+   internally (its accessor shim falls back `getExpressionBlock()` → `$counts`), so
+   ONLY per-sample construction branches — requires **conos >= 2.0**.
    ```r
-   panel.preprocessed <- lapply(panel, function(cm) {
-     p <- Pagoda2$new(cm, n.cores = 1, min.cells.per.gene = 0,
-                       log.scale = TRUE)
-     p$run(n.odgenes = 2000)        # adjustVariance → reduce (PCA) → kNN
-     p
-   })
+   pagoda2_is_devel <- function() is.function(tryCatch(pagoda2::Pagoda2$from, error = function(e) NULL))
+   preprocess_p2 <- function(cm, n.cores = 1) {
+     if (pagoda2_is_devel()) {        # pagoda2 >= 2.0 (devel): unified constructor + step pipeline
+       Pagoda2$from(cm, n.cores = n.cores, verbose = FALSE)$run(steps = c("variance", "pca"), verbose = FALSE)
+     } else {                          # pagoda2 1.x (CRAN/main): classic constructor + explicit steps
+       p <- Pagoda2$new(cm, n.cores = n.cores, log.scale = TRUE, verbose = FALSE)
+       p$adjustVariance(plot = FALSE, verbose = FALSE)
+       p$calculatePcaReduction(nPcs = 30, n.odgenes = 2000, verbose = FALSE)
+       p
+     }
+   }
+   panel.preprocessed <- lapply(panel, preprocess_p2)   # variance + PCA = the minimum conos needs
    ```
-   `$run()` chains the standard sequence (`runVariance → runReduction → runGraph`);
-   for a custom build use the individual `runVariance / runReduction / runGraph /
-   runLeiden` verbs. Quick imports: `Pagoda2$from(path)`, `from10x()`, `from10xH5()`,
-   `fromAnnData(".h5ad")`, `fromLstar(zarr_path)` (no Python). For Seurat use
-   `lapply(panel, basicSeuratProc)` (still exported from conos), or pass existing
-   Seurat objects (or a mix of Pagoda2 + Seurat) directly.
+   File readers differ by flavor: on **devel**, `Pagoda2$from/from10x/from10xH5/fromAnnData/`
+   `fromH5Seurat/fromLoom/fromLstar` read any format (no Python); on **CRAN 1.x** only 10x is
+   native (`read10xMatrix(path)` → `preprocess_p2()`), other formats need devel pagoda2 (or
+   convert upstream then `preprocess_p2(cm)`). For Seurat, pass Seurat objects directly (or a
+   Pagoda2 + Seurat mix); conos aligns on the PCA.
 3. `con <- Conos$new(panel.preprocessed, n.cores = 1)`.
 4. (Optional, recommended for multimodal panels) `con$planIntegration()` — polls
    each sample's modalities (pagoda2 facets / Seurat assays), reports per-modality
@@ -83,9 +94,12 @@ chain — heatmaps render via `sccore`'s native grid engine.
    ```
    You MUST call this before plotting. Name multiple embeddings with
    `embedding.name=`.
-8. Visualize: `con$plotPanel(clustering = 'leiden', font.size = 4)` (per-sample
-   small multiples; `use.local.clusters = TRUE` shows each sample's own
-   clusters) and `con$plotGraph(color.by = 'sample', alpha = 0.1)` /
+8. Visualize: `con$plotPanel(clustering = 'leiden', use.common.embedding = TRUE, font.size = 4)`
+   (per-sample small multiples on the JOINT embedding). **`use.common.embedding = TRUE` is
+   required** — the preprocessing above builds only variance + PCA, so samples have no
+   per-sample embedding and the default `FALSE` errors ("No 'tSNE' embedding presented in the
+   samples"). (`use.local.clusters = TRUE` shows each sample's own clusters.) Also
+   `con$plotGraph(color.by = 'sample', alpha = 0.1)` /
    `con$plotGraph(gene = 'GZMK')` (the joint embedding). Both wrap
    `sccore::embeddingPlot`.
 9. Label propagation: `info <- con$propagateLabels(labels = cellannot, verbose = TRUE)`
@@ -105,10 +119,12 @@ chain — heatmaps render via `sccore`'s native grid engine.
     ```
     `return.details = TRUE` now returns a heatmap *spec* (input to
     `sccore::drawHeatmap`), not a ComplexHeatmap object.
-11. Specific-marker dot plot (new): `con$plotMarkerDotPlot(de)`. Ranks by a
-    "balanced" rule (precision × expression-fraction harmonic mean + `min.auc`
-    discrimination floor) and assigns each gene to one best cluster, so
-    housekeeping / mitochondrial genes don't dominate.
+11. Specific-marker dot plot (new): `con$plotMarkerDotPlot(n.genes.per.group = 5, min.auc = 0.6)`.
+    (It computes the markers internally from the joint clustering — there is NO `de` argument;
+    the first positional arg is `clustering`, so do not pass a precomputed `de` table here.)
+    Ranks by a "balanced" rule (precision × expression-fraction harmonic mean + `min.auc`
+    discrimination floor) and assigns each gene to one best cluster, so housekeeping /
+    mitochondrial genes don't dominate.
 12. Between-group DE: define `samplegroups <- list(bm = c(...), cb = c(...))`, then
     `getPerCellTypeDE(con, groups = as.factor(new.annot), sample.groups = samplegroups,
     ref.level = 'bm')` (pseudobulk per cluster, DESeq2 under the hood). For custom
