@@ -64,3 +64,5 @@ scRNA references; **chromVAR** infers per-cell TF motif activity.
 `snapatac2` carries the ATAC-specific pipeline; once you have a **gene-activity** matrix, clustering
 and annotation reuse **`bp-clustering`** / **`bp-annotation`** concepts. Multiome (RNA+ATAC) joins
 the multimodal-integration family alongside **`bp-cite-seq`** / **`bp-data-integration`**.
+
+**Different-modality note:** for BULK / tissue ATAC-seq (no cell barcodes) this is the WRONG recipe — route to `bp-bulk-atac` (nf-core/atacseq). For multiome (paired RNA+ATAC), the fragments/matrices are generated upstream by nf-core/scrnaseq `--aligner cellrangerarc` (see `bp-scrnaseq-quantification`), then this snapATAC2 flow analyzes the ATAC side. (There is no standalone nf-core scATAC pipeline; single-modality scATAC fragments come from Cell Ranger ATAC.)

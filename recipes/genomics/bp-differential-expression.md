@@ -70,3 +70,4 @@ subject term are prone to false positives from pseudoreplication.
 `decoupler` for aggregation, then **`bulk-rnaseq-de`** (pydeseq2) or **`deseq2-r`** (R, for
 LRT/multi-factor/custom contrasts) on the pseudobulk. Feed the ranked DE results into
 **`bp-gsea-pathway`** for enrichment.
+If your data is TRUE bulk RNA-seq (not scRNA pseudobulk), the upstream gene-count matrix comes from nf-core/rnaseq — see `bp-bulk-rnaseq-quantification` — and the same raw-counts→DESeq2/edgeR logic here applies directly to that matrix (skip the pseudobulk aggregation step).

@@ -16,6 +16,8 @@ QC removes low-quality barcodes (ambient/dying cells, doublets) WITHOUT biasing 
 real rare populations. The book's central message: be **lenient and data-driven** (MAD-based),
 consider metrics **jointly**, and revisit QC after annotation.
 
+This is CELL-level QC on the count matrix. Read/sequencing-level QC (per-base quality, adapter content, duplication — the MultiQC report) comes from the upstream quantification pipeline, not here: if you ran nf-core/scrnaseq (see `bp-scrnaseq-quantification`) inspect its `multiqc_report.html` first. This knowhow starts once you have a matrix.
+
 **Provision:** `ensure_capability(["scanpy","anndata","scrublet"])`.
 
 ## The three core QC covariates

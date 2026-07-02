@@ -20,6 +20,7 @@ the recipe captures the BOOK'S choices so the agent can pick a mapper and read i
 ## Mapper choice (the first real decision)
 - **alevin-fry** (salmon) / **kallisto|bustools (kb-python)** — fast, memory-frugal
   pseudoalignment to a transcriptome. ABA has a ready path: see `quantify-fastq-to-counts-kb`.
+  For a reproducible, cluster-friendly PIPELINED run of this whole FASTQ→matrix stage (nf-core picks and runs the mapper for you), see `bp-scrnaseq-quantification`.
 - **STARsolo** / **Cell Ranger** — spliced alignment to the FULL genome; slower but
   captures intronic/unannotated reads. Cell Ranger is the 10x commercial standard.
 - **zUMIs** — genome-based with integrated QC.
@@ -72,3 +73,4 @@ adata.write("count_matrix.h5ad")
 `ensure_capability(["scanpy","anndata","kb-python"])`. For the actual FASTQ->counts run in
 Python, use the **`quantify-fastq-to-counts-kb`** recipe (kb-python). Otherwise this matrix
 feeds **`bp-quality-control`** next.
+This recipe is the CONCEPTUAL walkthrough plus the in-Python kb-python path (`quantify-fastq-to-counts-kb`); for the production nf-core/scrnaseq route see `bp-scrnaseq-quantification`. Either way the matrix feeds `bp-quality-control` next.

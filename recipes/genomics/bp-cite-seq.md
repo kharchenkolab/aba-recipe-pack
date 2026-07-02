@@ -73,4 +73,4 @@ embeddings come from multimodal integration (totalVI / WNN / MOFA).
 ## In ABA
 `muon`/`mudata` for the multimodal object. RNA-side steps reuse **`bp-quality-control`** /
 **`bp-normalization`** / **`bp-annotation`**; multimodal integration (totalVI) sits alongside
-**`bp-data-integration`** (`scvi-tools` family).
+**`bp-data-integration`** (`scvi-tools` family). The paired RNA + ADT `filtered_feature_bc_matrix.h5` this recipe reads is produced UPSTREAM by feature-barcode quantification — run nf-core/scrnaseq `--aligner cellrangermulti` with an antibody `--fb_reference` (see `bp-scrnaseq-quantification`); a plain single-modality aligner silently drops the ADT reads.

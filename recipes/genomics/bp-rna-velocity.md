@@ -61,3 +61,5 @@ scv.pl.scatter(adata, basis=["GENE1","GENE2"], color="leiden")  # phase portrait
 Pair with **`bp-trajectory-inference`** (pseudotime topology) — CellRank fuses velocity + pseudotime
 into fate maps. Reference must emit spliced+unspliced (augmented transcriptome,
 `bp-raw-data-processing`).
+
+To generate the spliced+unspliced layers, use the kb-python augmented path (`quantify-fastq-to-counts-kb` / `bp-raw-data-processing`) as the primary, guaranteed route; the pipelined nf-core/scrnaseq route (simpleaf intron-aware / STARsolo velocity mode, see `bp-scrnaseq-quantification`) is a secondary option but exposes no documented velocity toggle, so verify it emits both layers.
