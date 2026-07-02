@@ -4,7 +4,8 @@ description: Best-practice CUT&RUN / CUT&Tag occupancy analysis — nf-core/cuta
   dual-genome align -> spike-in normalization -> IgG-controlled SEACR/MACS2 peak calling -> consensus
   + fragment/FRiP QC), the low-input in-situ alternative to ChIP-seq.
 when_to_use: Use for CUT&RUN, CUT&Tag, or TIPseq FASTQs (antibody + pAG-MNase or pAG-Tn5 in permeabilized
-  cells/nuclei, low cell input, IgG control instead of a sonicated input) to map TF or histone-mark occupancy
+  cells/nuclei, low cell input — hundreds to tens of thousands of cells, e.g. ~50,000 is low-input BULK, NOT
+  single-cell — IgG control instead of a sonicated input) to map TF or histone-mark occupancy
   — spike-in-normalized coverage, IgG-gated peaks (SEACR for low-background CUT&Tag, MACS2 as alternative),
   consensus peaksets, and fragment/FRiP QC. NOT crosslink+sonication+input ChIP-seq (use bp-chipseq);
   NOT open-chromatin ATAC-seq (use bp-bulk-atac / bp-atac).
@@ -29,6 +30,10 @@ keywords:
 - MACS2
 - GoPeaks
 - low-input chromatin profiling
+- low cell number
+- limited cell input
+- tens of thousands of cells
+- 50000 cells
 - histone modification
 - transcription factor occupancy
 - consensus peaks
@@ -73,7 +78,7 @@ Why this shape (and how it differs from ChIP-seq):
 - **Spike-in present?** — is there an E. coli / exogenous spike-in genome to scale by? If yes, enable spike-in normalization and set SEACR to `non`. If no, fall back to read-count/library-size normalization (weaker for cross-condition quantitation).
 - **IgG control present?** — matched IgG enables threshold/enrichment-based peak calling and background gating; without it, peak calling is less reliable.
 - **Target type / peak shape** — punctate **TF or narrow histone marks** (H3K4me3, H3K27ac) vs **broad domains** (H3K27me3, H3K9me3). Drives narrow vs broad peak mode and caller choice (GoPeaks/SEACR strong on broad).
-- **Cell input & depth** — CUT&Tag works from ~hundreds of cells; low complexity libraries need duplicate-aware QC. Typical targets: a few million usable reads for sharp marks/TFs, more for broad domains.
+- **Cell input & depth** — CUT&Tag works from ~hundreds of cells up; a modest count like **tens of thousands (e.g. 50,000) is a LOW-INPUT BULK population and squarely CUT&RUN/CUT&Tag's sweet spot — NOT a reason to reach for a single-cell assay** (single-cell CUT&Tag exists but is a niche, specialized method). Low-complexity libraries need duplicate-aware QC. Typical targets: a few million usable reads for sharp marks/TFs, more for broad domains.
 - **Replicates** — >=2 biological replicates per condition for any differential-binding claim (pseudoreplication kills it).
 - **Paired-end** — CUT&RUN/CUT&Tag are paired-end; PE fragment sizes are essential for fragment-length QC and for MNase/Tn5 fragment-based peak calling.
 - **Organism / genome** — target genome plus a spike-in genome index (commonly E. coli) for the dual alignment.
