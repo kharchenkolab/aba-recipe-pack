@@ -2,7 +2,7 @@
 name: scrna-integration-decision
 description: Decision guide for choosing a scRNA-seq sample/batch integration method. Compares Harmony, Seurat CCA, Seurat RPCA, scVI, conos, and the BBKNN/Scanorama/FastMNN tier. Use when the user has multiple scRNA-seq samples whose cells separate by sample in the unintegrated UMAP and is choosing between methods.
 when_to_use: User has 2+ scRNA-seq samples, the unintegrated PCA/UMAP shows cluster-by-sample rather than cluster-by-cell-type, and they are asking "which integration method?" or "Harmony vs CCA vs scVI for my data?". Also use when an agent is binding an integration recipe and needs a defensible reason to prefer one over the others.
-avoid_when: User has one sample (no integration to do — see scrna-qc-clustering), or the biological question IS the sample/condition contrast (integrating over it removes the signal — see anti-patterns §5), or the user wants a runnable workflow (route to the executable recipe directly: harmony-integration / harmony-integration-scanpy / seurat-integration / scvi-integration / conos-integration / bp-data-integration).
+avoid_when: 'User has one sample (no integration to do — see scrna-qc-clustering), or the biological question IS the sample/condition contrast (integrating over it removes the signal — see anti-patterns §5), or the user wants a runnable workflow (route to the executable recipe directly: harmony-integration / harmony-integration-scanpy / seurat-integration / scvi-integration / conos-integration / bp-data-integration).'
 invocation: interactive
 kind: knowhow_draft
 requires_tools: [WebFetch, Read]
