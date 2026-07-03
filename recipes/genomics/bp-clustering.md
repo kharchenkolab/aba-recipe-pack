@@ -59,3 +59,6 @@ Caution: deep sub-clustering can split on noise — validate splits with markers
 Pick the resolution that best matches expected biology, then annotate with **`bp-annotation`**.
 If batches are present, build the graph on an integrated embedding from **`bp-data-integration`**
 (`use_rep="X_scVI"` / `"X_pca_harmony"`) before clustering.
+
+To explore the clustered object interactively (or choose a format to save/share
+it), see **`scrna-viewing-and-interchange`** (pagoda3 viewer; `.h5ad` / `.lstar.zarr`).
