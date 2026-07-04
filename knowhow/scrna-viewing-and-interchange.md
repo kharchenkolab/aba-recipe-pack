@@ -47,7 +47,8 @@ is ready.
 | Format | What it is | Reach for it when |
 |---|---|---|
 | **`.h5ad`** (AnnData) | The single-cell lingua franca; scanpy-native, read by nearly every Python/R tool and by cellxgene | Default for sharing, archiving, and cross-tool moves. When in doubt, save `.h5ad`. |
-| **`.lstar.zarr`** (lstar) | Chunked, HTTP-range-readable, disk-backed, multimodal-friendly Zarr store | You want **portability + instant viewing** (it's pagoda3's zero-conversion fast path — opens with no per-launch conversion), or the object is large and shouldn't be fully loaded into RAM. Round-trips with AnnData / Seurat / pagoda2 via lstar. |
+| **`.lstar.zarr`** (lstar, **directory**) | Chunked, disk-backed, multimodal-friendly Zarr **directory** store | You want **portability + instant viewing** (pagoda3's zero-conversion fast path — opens with no per-launch conversion), or the object is large and shouldn't be fully loaded into RAM. **Prefer the directory form**: it loads much faster in the viewer (parallel chunk fetches) and stays updatable. Round-trips with AnnData / Seurat / pagoda2 via lstar. |
+| **`.lstar.zarr.zip`** (single-file) | The same store packed into one STORED (range-readable) file | Only when you need a **single file** to move/host. Loads slower than the directory and is immutable — unpack it back to the directory to work with or view it. |
 | **RDS / Seurat** (`.rds`, `.h5Seurat`) | R-native serialization | Staying inside an R/Seurat workflow. Convert to `.h5ad` before handing to a viewer or a Python tool. |
 | **loom** | Older HDF5-based format | Only for a tool that specifically requires it — otherwise prefer `.h5ad`. |
 
