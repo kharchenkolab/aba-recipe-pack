@@ -70,9 +70,12 @@ suppressPackageStartupMessages({
   library(tidyr)
 })
 
-# Optional Wilcoxon accelerator — auto-detected by Seurat v5; install once if missing.
+# Wilcoxon accelerator — Seurat v5 auto-uses presto (presto::wilcoxauc) for
+# FindMarkers/FindAllMarkers; WITHOUT it, Wilcoxon falls back to a slow looping
+# base-R implementation (>10 min vs <1 s on a small dataset). Shipped with Seurat
+# by default (r-environment.yml); self-heal if a deployment predates that.
 if (!requireNamespace("presto", quietly = TRUE)) {
-  # devtools::install_github("immunogenomics/presto")
+  try(ensure_capability("presto"), silent = TRUE)   # prebuilt r-presto (bioconda)
 }
 
 stopifnot(packageVersion("Seurat") >= "5.0.0")  # this recipe is v5-only
@@ -772,22 +775,25 @@ markers, sub-clustering, or annotation without re-running 1–6.
 > Details in `references/installation_and_io.md`.
 
 **Offer to explore it interactively.** Once the object is saved, offer to open the
-result in ABA's interactive viewer (pagoda3). **Prefer a live-session export** —
-you're already in R with the object fully loaded, which is the highest-fidelity
-path:
+result in ABA's interactive viewer (pagoda3). Write the viewer store **directly
+from the live Seurat object** with lstar — pure R, no `.h5ad` detour:
 
 ```r
-# Seurat -> .h5ad from the live object (all reductions/metadata carried across):
-sce <- Seurat::as.SingleCellExperiment(obj)
-zellkonverter::writeH5AD(sce, "seurat_processed.h5ad")
+# Seurat object -> lstar viewer store, in-session (highest fidelity: all
+# reductions/metadata carried across). lstar is pure R here — do NOT route
+# through .h5ad (zellkonverter/sceasy spin up a basilisk/reticulate Python env,
+# which is slow and unnecessary just to view the result).
+d <- lstar::read_seurat(obj)
+lstar::lstar_write(d, "seurat_processed.lstar.zarr")
 ```
 
-Then call `open_viewer(file_path="seurat_processed.h5ad")` and present the link.
-You *can* instead hand `open_viewer` the `seurat_processed.rds` directly (ABA
+Then call `open_viewer(file_path="seurat_processed.lstar.zarr")` and present the
+link. You *can* instead hand `open_viewer` the `seurat_processed.rds` directly (ABA
 converts it on launch), but that's a lower-fidelity fallback meant for installs
-without the R stack — prefer the in-session `.h5ad` when you have it. Offer once,
-when the result is ready; if `open_viewer` returns `ok:false`, relay the error
-rather than handing out a dead link.
+without the R stack — prefer the in-session `.lstar.zarr` when you have it. Only
+export `.h5ad` when the goal is a different tool (scanpy, cellxgene), not the ABA
+viewer. Offer once, when the result is ready; if `open_viewer` returns `ok:false`,
+relay the error rather than handing out a dead link.
 
 ---
 

@@ -83,21 +83,24 @@ import lstar
 lstar.convert_anndata("result.h5ad", "result.lstar.zarr")   # lstar-sc (in ABA's base env)
 ```
 
-From R objects, **prefer exporting from your live R session** — where the object
-is fully loaded with its own packages, the export is highest-fidelity (all
-reductions, layers, and metadata carried across):
+From R objects, **write the `.lstar.zarr` store directly from the live object with
+lstar** — it's pure R, highest-fidelity (all reductions/layers/metadata carried
+across), and the uniform path for every R format:
 
 ```r
-# pagoda2: native .h5ad export, OR an lstar store from the live object.
-p2$export("result.h5ad", format = "h5ad", overwrite = TRUE)      # -> pagoda3 reads .h5ad
-d <- lstar::read_pagoda2(p2);  lstar::lstar_write(d, "result.lstar.zarr")
-
-# conos: build the joint Dataset from the live object, then write the store.
-d <- lstar::write_conos(con);  lstar::lstar_write(d, "joint.lstar.zarr")
-
-# Seurat / SingleCellExperiment: write .h5ad in-session (e.g. sceasy /
-# zellkonverter) — then view the .h5ad.
+d <- lstar::read_seurat(obj);   lstar::lstar_write(d, "result.lstar.zarr")   # Seurat
+d <- lstar::read_sce(sce);      lstar::lstar_write(d, "result.lstar.zarr")   # SingleCellExperiment
+d <- lstar::read_pagoda2(p2);   lstar::lstar_write(d, "result.lstar.zarr")   # pagoda2
+d <- lstar::write_conos(con);   lstar::lstar_write(d, "joint.lstar.zarr")    # conos (joint)
 ```
+
+**Do NOT detour through `.h5ad` just to view an R object.** Writing `.h5ad` from R
+(`zellkonverter`/`sceasy`) spins up a **basilisk/reticulate Python environment** —
+slow and pointless when lstar goes straight to the store in R. Export `.h5ad` only
+when the target is a *different* tool (scanpy, cellxgene). (`lstar::read_*` are
+pure Rcpp — no Python. Note `library(Seurat)` itself loads the `reticulate`
+namespace, but that alone spins up no Python env; the store path never calls into
+Python.)
 
 **On-the-fly `.rds` is a fallback, not the preferred path.** ABA *can* convert a
 Seurat/SCE `.rds` at viewer-launch (hand the `.rds` straight to `open_viewer`),
