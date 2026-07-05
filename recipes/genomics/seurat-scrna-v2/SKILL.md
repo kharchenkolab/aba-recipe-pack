@@ -770,7 +770,10 @@ rm(obj_check); invisible(gc())
 #    Do NOT route through .h5ad: zellkonverter/sceasy spin up a basilisk/reticulate
 #    Python env — slow and pointless just to view the result.
 d <- lstar::read_seurat(obj)
-lstar::lstar_write(d, "seurat_processed.lstar.zarr")
+lstar::lstar_write_viewer(d, "seurat_processed.lstar.zarr")   # viewer=TRUE: precomputes
+# DE / variable-genes / cell-major counts in R so pagoda3 opens it *optimized* (no
+# "Not viewer-optimized" banner). Needs the clustering set as Idents (Step 6). Plain
+# lstar_write() also works but leaves the store un-optimized.
 ```
 
 Then **call `open_viewer(file_path="seurat_processed.lstar.zarr")` and present the

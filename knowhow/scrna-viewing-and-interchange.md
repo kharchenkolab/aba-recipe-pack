@@ -88,11 +88,16 @@ lstar** — it's pure R, highest-fidelity (all reductions/layers/metadata carrie
 across), and the uniform path for every R format:
 
 ```r
-d <- lstar::read_seurat(obj);   lstar::lstar_write(d, "result.lstar.zarr")   # Seurat
-d <- lstar::read_sce(sce);      lstar::lstar_write(d, "result.lstar.zarr")   # SingleCellExperiment
-d <- lstar::read_pagoda2(p2);   lstar::lstar_write(d, "result.lstar.zarr")   # pagoda2
-d <- lstar::write_conos(con);   lstar::lstar_write(d, "joint.lstar.zarr")    # conos (joint)
+d <- lstar::read_seurat(obj);   lstar::lstar_write_viewer(d, "result.lstar.zarr")  # Seurat
+d <- lstar::read_sce(sce);      lstar::lstar_write_viewer(d, "result.lstar.zarr")  # SingleCellExperiment
+d <- lstar::read_pagoda2(p2);   lstar::lstar_write_viewer(d, "result.lstar.zarr")  # pagoda2
+d <- lstar::write_conos(con);   lstar::lstar_write_viewer(d, "joint.lstar.zarr")   # conos (joint)
 ```
+
+Use `lstar_write_viewer` (not plain `lstar_write`) for the viewer path: it
+precomputes DE / variable genes / cell-major counts in R so pagoda3 opens the store
+**optimized** (no "Not viewer-optimized" banner) — and does it in pure R, avoiding
+the WASM prep step. It needs a clustering/grouping present on the object.
 
 **Do NOT detour through `.h5ad` just to view an R object.** Writing `.h5ad` from R
 (`zellkonverter`/`sceasy`) spins up a **basilisk/reticulate Python environment** —

@@ -173,7 +173,8 @@ chain — heatmaps render via `sccore`'s native grid engine.
   ```r
   d <- lstar::write_conos(con)                 # joint Conos object   -> lstar Dataset
   d <- lstar::read_pagoda2(p2)                 # a single Pagoda2 obj -> lstar Dataset
-  lstar::lstar_write(d, "joint.lstar.zarr")    # Dataset -> .lstar.zarr store
+  lstar::lstar_write_viewer(d, "joint.lstar.zarr")  # -> optimized .lstar.zarr store
+                                                    #    (precomputes DE/HVG; no banner)
   ```
   (lstar's `.rds`/CLI converter reads only Seurat/SCE — pagoda2/conos ingest
   goes through these R functions on the live object, not a saved `.rds`.)
