@@ -72,6 +72,7 @@ turnkey annotation, and **`unsupervised-celltype-transfer-between-scrna-datasets
 Annotated labels feed condition analyses: **`bp-differential-expression`**,
 **`bp-compositional-analysis`**, **`bp-gsea-pathway`**.
 
-Once annotated, the object is worth exploring interactively and sharing — see
-**`scrna-viewing-and-interchange`** (open it in pagoda3; `.h5ad` vs `.lstar.zarr`
-for portability).
+Once annotated, **proactively offer an interactive view**: call
+`open_viewer(file_path=<your saved .h5ad>)` and present the returned link so the
+user can explore the labels on the UMAP in pagoda3 (offer it once, after reporting
+the result). Format/sharing choices → **`scrna-viewing-and-interchange`**.

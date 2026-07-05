@@ -37,10 +37,13 @@ loads the viewer; subsequent opens are instant (the prepared store is cached).
 
 **For the agent:** when you finish a single-cell analysis that yields a
 clustered or annotated object, *offer* to open it in pagoda3 — call
-`open_viewer(entity_id=…)` and present the returned link. Only offer this for
-single-cell result objects (`.h5ad` / `.lstar.zarr`); a figure or table already
-renders inside ABA and needs no viewer. Don't nag — offer once, when the result
-is ready.
+`open_viewer(file_path="processed.h5ad")` (a bare filename is fine — it's resolved
+against the project's files) or `open_viewer(entity_id=…)` for a registered dataset,
+then present the returned link. Only offer this for single-cell result objects
+(`.h5ad` / `.h5mu` / `.lstar.zarr`, or a Seurat/SCE/pagoda2/conos `.rds`); a figure
+or table already renders inside ABA and needs no viewer. Don't nag — offer once,
+when the result is ready. If `open_viewer` returns `ok:false`, relay the error;
+never hand out a link that didn't resolve.
 
 ## Interchange formats — what to save
 

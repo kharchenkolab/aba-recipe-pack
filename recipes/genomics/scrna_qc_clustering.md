@@ -676,6 +676,14 @@ print(f"saved: processed.h5ad ({os.path.getsize('processed.h5ad')/1e6:.1f} MB)")
 print(adata)
 ```
 
+### Offer an interactive view
+
+`processed.h5ad` is a clustered single-cell result — **proactively offer to open it
+in the viewer**: call `open_viewer(file_path='processed.h5ad')` and present the
+returned link (a launch button) so the user can explore the UMAP, markers, and
+metadata in pagoda3. Conversion is on-demand and cheap; offer it once, right after
+you report the result. Format/sharing choices → **`scrna-viewing-and-interchange`**.
+
 ---
 
 ## What this recipe does NOT do
