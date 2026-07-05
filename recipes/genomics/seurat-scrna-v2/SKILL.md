@@ -749,54 +749,33 @@ heuristics, and the manual vs reference-mapped annotation paths, read
 
 ---
 
-## Step 8 — Save the processed object
+## Step 8 — Save & deliver: object, viewer store, and interactive link
+
+The closing step *delivers* the result — save the object, write the viewer store,
+and hand the user a **clickable way to explore it**, not just files on disk.
+Present this as the final "save & deliver" step of your plan; the interactive
+viewer link comes from here, so don't drop it.
 
 ```r
+# 1. Save the processed object.
 saveRDS(obj, file = "seurat_processed.rds")
-
-# Verify the write — size + round-trip dim.
 sz <- file.info("seurat_processed.rds")$size / 1e6
 cat(sprintf("Wrote seurat_processed.rds (%.1f MB)\n", sz))
 obj_check <- readRDS("seurat_processed.rds")
 stopifnot(identical(dim(obj_check), dim(obj)))
 rm(obj_check); invisible(gc())
-```
 
-The `.rds` carries the full `RNA` assay (counts, data, scale.data layers),
-the `pca` and `umap` reductions, the `RNA_nn` / `RNA_snn` graphs, the
-`seurat_clusters` column, and the HVGs. A follow-up session resumes from
-markers, sub-clustering, or annotation without re-running 1–6.
-
-> **Faster I/O on large objects.** `qs::qsave(obj, "seurat_processed.qs")`
-> is 2–3× faster than `saveRDS` for big objects and produces smaller files.
-
-> **Handing off to scanpy / Python.** Use `zellkonverter` (Bioconductor)
-> via the `SingleCellExperiment` bridge — produces a standard `.h5ad`.
-> Details in `references/installation_and_io.md`.
-
----
-
-## Step 9 — Write the viewer store and share the interactive link
-
-**This is a required final step of every run — not optional, and not something to
-skip once the object is saved.** The user should finish with a clickable way to
-explore the result interactively, not just files on disk. Include this as its own
-step in any plan you present.
-
-Write the pagoda3 viewer store **directly from the live Seurat object** with lstar
-— pure R, no `.h5ad` detour:
-
-```r
-# Seurat object -> lstar viewer store, in-session (highest fidelity: all
-# reductions/metadata carried across). lstar is pure R here — do NOT route through
-# .h5ad (zellkonverter/sceasy spin up a basilisk/reticulate Python env, slow and
-# unnecessary just to view the result).
+# 2. Write the pagoda3 viewer store DIRECTLY from the live Seurat object with
+#    lstar — pure R, highest fidelity (all reductions/metadata carried across).
+#    Do NOT route through .h5ad: zellkonverter/sceasy spin up a basilisk/reticulate
+#    Python env — slow and pointless just to view the result.
 d <- lstar::read_seurat(obj)
 lstar::lstar_write(d, "seurat_processed.lstar.zarr")
 ```
 
-Then call `open_viewer(file_path="seurat_processed.lstar.zarr")` and **present the
-returned link in your closing message.** Notes:
+Then **call `open_viewer(file_path="seurat_processed.lstar.zarr")` and present the
+returned link in your closing message** — a required part of delivering the result,
+not optional. Notes:
 - You *can* instead hand `open_viewer` the `seurat_processed.rds` directly (ABA
   converts on launch), but that's a lower-fidelity fallback for installs without
   the R stack — prefer the in-session `.lstar.zarr`.
@@ -805,9 +784,20 @@ returned link in your closing message.** Notes:
 - If `open_viewer` returns `ok:false`, relay the error rather than handing out a
   dead link.
 
+The `.rds` carries the full `RNA` assay (counts, data, scale.data layers), the
+`pca`/`umap` reductions, the `RNA_nn`/`RNA_snn` graphs, `seurat_clusters`, and the
+HVGs — a follow-up session resumes from markers/sub-clustering/annotation without
+re-running 1–6.
+
+> **Faster I/O on large objects.** `qs::qsave(obj, "seurat_processed.qs")` is
+> 2–3× faster than `saveRDS` for big objects and produces smaller files.
+> **Handing off to scanpy / Python?** `zellkonverter` (Bioconductor) via the
+> `SingleCellExperiment` bridge gives a standard `.h5ad` — that's for *other tools*,
+> not the ABA viewer. Details in `references/installation_and_io.md`.
+
 ---
 
-## Batch variant — use INSTEAD of Steps 1–9 when invoked with args="batch"
+## Batch variant — use INSTEAD of Steps 1–8 when invoked with args="batch"
 
 Branch on `$ARGUMENTS == "batch"` at the top of the body. In batch mode the
 canonical step-by-step + figure + report cadence is replaced by ONE
@@ -874,7 +864,7 @@ Summarize:
   any cluster with zero markers
 - figures shown to the user (filenames)
 - saved files (`seurat_processed.rds`, `cluster_markers.csv`, `seurat_processed.lstar.zarr`)
-- **the interactive viewer link** from Step 9 (`open_viewer` on the
+- **the interactive viewer link** from Step 8 (`open_viewer` on the
   `.lstar.zarr`) — always include it; if you couldn't produce one, say why
 - caveats: doublet detection not run, batch effects (single-sample so
   irrelevant unless the sample is itself a multiplexed pool), weak markers,
