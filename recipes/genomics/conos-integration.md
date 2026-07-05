@@ -167,6 +167,18 @@ chain — heatmaps render via `sccore`'s native grid engine.
   (RNA, ADT/CITE-seq, ATAC) is its own facet with a view model
   (plain / CLR / TF-IDF). For single-modality scRNA-seq the recipe above is
   what you want; cross-modality WNN-style work is a separate recipe.
-- For zarr/HDF5 interchange (e.g. round-tripping with AnnData / Seurat
-  written from Python or R), the new `lstar` package is the canonical path
-  (`Pagoda2$fromLstar(path)`, `lstar::write_pagoda2(p, path)`).
+- For zarr/HDF5 interchange (round-tripping with AnnData / Seurat, or feeding
+  ABA's viewer), the `lstar` package is the canonical path. Build an lstar
+  Dataset from the **live** object, then write a store:
+  ```r
+  d <- lstar::write_conos(con)                 # joint Conos object   -> lstar Dataset
+  d <- lstar::read_pagoda2(p2)                 # a single Pagoda2 obj -> lstar Dataset
+  lstar::lstar_write(d, "joint.lstar.zarr")    # Dataset -> .lstar.zarr store
+  ```
+  (lstar's `.rds`/CLI converter reads only Seurat/SCE — pagoda2/conos ingest
+  goes through these R functions on the live object, not a saved `.rds`.)
+- **Offer to explore the joint result:** after writing `joint.lstar.zarr` (or an
+  `.h5ad`), offer to open it in ABA's interactive viewer — call
+  `open_viewer(file_path="joint.lstar.zarr")` and present the returned link.
+  Point the viewer at the store/`.h5ad`, never the raw conos `.rds`. Offer once;
+  if `open_viewer` returns `ok:false`, relay the error.

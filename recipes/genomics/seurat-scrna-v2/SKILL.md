@@ -771,6 +771,24 @@ markers, sub-clustering, or annotation without re-running 1–6.
 > via the `SingleCellExperiment` bridge — produces a standard `.h5ad`.
 > Details in `references/installation_and_io.md`.
 
+**Offer to explore it interactively.** Once the object is saved, offer to open the
+result in ABA's interactive viewer (pagoda3). **Prefer a live-session export** —
+you're already in R with the object fully loaded, which is the highest-fidelity
+path:
+
+```r
+# Seurat -> .h5ad from the live object (all reductions/metadata carried across):
+sce <- Seurat::as.SingleCellExperiment(obj)
+zellkonverter::writeH5AD(sce, "seurat_processed.h5ad")
+```
+
+Then call `open_viewer(file_path="seurat_processed.h5ad")` and present the link.
+You *can* instead hand `open_viewer` the `seurat_processed.rds` directly (ABA
+converts it on launch), but that's a lower-fidelity fallback meant for installs
+without the R stack — prefer the in-session `.h5ad` when you have it. Offer once,
+when the result is ready; if `open_viewer` returns `ok:false`, relay the error
+rather than handing out a dead link.
+
 ---
 
 ## Batch variant — use INSTEAD of Steps 1–8 when invoked with args="batch"

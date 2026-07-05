@@ -39,11 +39,24 @@ loads the viewer; subsequent opens are instant (the prepared store is cached).
 clustered or annotated object, *offer* to open it in pagoda3 — call
 `open_viewer(file_path="processed.h5ad")` (a bare filename is fine — it's resolved
 against the project's files) or `open_viewer(entity_id=…)` for a registered dataset,
-then present the returned link. Only offer this for single-cell result objects
-(`.h5ad` / `.h5mu` / `.lstar.zarr`, or a Seurat/SCE/pagoda2/conos `.rds`); a figure
-or table already renders inside ABA and needs no viewer. Don't nag — offer once,
-when the result is ready. If `open_viewer` returns `ok:false`, relay the error;
-never hand out a link that didn't resolve.
+then present the returned link. Offer this for single-cell result objects only;
+a figure or table already renders inside ABA and needs no viewer. What to point
+`open_viewer` at depends on the object:
+
+- **`.h5ad` / `.h5mu` / `.lstar.zarr`** — hand these to the viewer as-is. If the
+  analysis was in R, prefer producing one of these from the live session (highest
+  fidelity) and view that.
+- **Seurat / SingleCellExperiment `.rds`** — you *can* hand the `.rds` directly (ABA
+  converts on launch), but that's a lower-fidelity fallback for installs without the
+  R stack; if you just made the object in R, export `.h5ad`/`.lstar.zarr` in-session
+  and point the viewer at that instead.
+- **pagoda2 / conos** — do **not** hand the raw pagoda2/conos `.rds` to the viewer
+  (lstar's converter reads only Seurat/SCE `.rds`). Point `open_viewer` at the
+  `.h5ad` or `.lstar.zarr` the analysis writes from the live object (the pagoda2
+  recipe already produces `pagoda2_processed.h5ad`; see "How to save / convert").
+
+Don't nag — offer once, when the result is ready. If `open_viewer` returns
+`ok:false`, relay the error; never hand out a link that didn't resolve.
 
 ## Interchange formats — what to save
 
@@ -70,9 +83,32 @@ import lstar
 lstar.convert_anndata("result.h5ad", "result.lstar.zarr")   # lstar-sc (in ABA's base env)
 ```
 
-From Seurat or pagoda2 (R): see the export reference bundled with the pagoda2
-recipe — `recipes/genomics/pagoda2-scrna-v2` → `references/export_and_interop.md`
-(covers `.h5ad` export and the lstar Zarr path from R objects).
+From R objects, **prefer exporting from your live R session** — where the object
+is fully loaded with its own packages, the export is highest-fidelity (all
+reductions, layers, and metadata carried across):
+
+```r
+# pagoda2: native .h5ad export, OR an lstar store from the live object.
+p2$export("result.h5ad", format = "h5ad", overwrite = TRUE)      # -> pagoda3 reads .h5ad
+d <- lstar::read_pagoda2(p2);  lstar::lstar_write(d, "result.lstar.zarr")
+
+# conos: build the joint Dataset from the live object, then write the store.
+d <- lstar::write_conos(con);  lstar::lstar_write(d, "joint.lstar.zarr")
+
+# Seurat / SingleCellExperiment: write .h5ad in-session (e.g. sceasy /
+# zellkonverter) — then view the .h5ad.
+```
+
+**On-the-fly `.rds` is a fallback, not the preferred path.** ABA *can* convert a
+Seurat/SCE `.rds` at viewer-launch (hand the `.rds` straight to `open_viewer`),
+but that path is a compromise for installs **without** the heavy R stack — it
+reads the serialized `.rds` without a full live session and is lower-fidelity
+than an in-session export. When you're already in R, export `.h5ad`/`.lstar.zarr`
+and view that. For **pagoda2/conos** there is no `.rds` fallback at all — lstar's
+`.rds` converter reads only Seurat/SCE, so their ingest *must* go through the R
+functions above on the live object. See the export reference bundled with the
+pagoda2 recipe — `recipes/genomics/pagoda2-scrna-v2` →
+`references/export_and_interop.md`.
 
 Register the saved file as a dataset so it appears as an entity (and picks up
 the "Explore in pagoda3" affordance) rather than living only on disk.

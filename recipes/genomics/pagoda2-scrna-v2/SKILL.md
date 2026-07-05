@@ -421,6 +421,15 @@ p2$export(
 RDS filename, h5ad filename, exported cells and genes, and whether h5ad export
 included raw counts and normalized expression.
 
+**Offer to explore it:** once `pagoda2_processed.h5ad` is written, offer to open
+the result in ABA's interactive viewer — call
+`open_viewer(file_path="pagoda2_processed.h5ad")` and present the returned link.
+Point the viewer at the **`.h5ad`** (or an `.lstar.zarr` store — see
+`references/export_and_interop.md`), **not** the pagoda2 `.rds`: ABA's on-launch
+converter reads only Seurat/SCE `.rds`, so a raw pagoda2 object won't open. Offer
+once, when the result is ready; if `open_viewer` returns `ok:false`, relay the
+error rather than handing out a dead link.
+
 For metadata resolution and export semantics, read
 `references/matrix_and_metadata_model.md` and
 `references/export_and_interop.md`.
