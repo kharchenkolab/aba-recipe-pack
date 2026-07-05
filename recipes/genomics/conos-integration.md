@@ -177,8 +177,10 @@ chain — heatmaps render via `sccore`'s native grid engine.
   ```
   (lstar's `.rds`/CLI converter reads only Seurat/SCE — pagoda2/conos ingest
   goes through these R functions on the live object, not a saved `.rds`.)
-- **Offer to explore the joint result:** after writing `joint.lstar.zarr` (or an
-  `.h5ad`), offer to open it in ABA's interactive viewer — call
-  `open_viewer(file_path="joint.lstar.zarr")` and present the returned link.
-  Point the viewer at the store/`.h5ad`, never the raw conos `.rds`. Offer once;
-  if `open_viewer` returns `ok:false`, relay the error.
+### Offer an interactive view
+
+**Required final step — not optional.** After writing `joint.lstar.zarr`,
+**proactively offer to open it in ABA's interactive viewer** — call
+`open_viewer(file_path="joint.lstar.zarr")` and present the returned link in your
+closing message. Point the viewer at the store (or an `.h5ad`), never the raw
+conos `.rds`. If `open_viewer` returns `ok:false`, relay the error.

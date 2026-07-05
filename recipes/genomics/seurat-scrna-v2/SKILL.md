@@ -6,7 +6,7 @@ invocation: interactive+batch
 requires_tools: [run_r]
 capabilities_needed: [Seurat]
 keywords: [Seurat, Seurat v5, scRNA-seq, single cell, single-cell, QC, percent.mt, NormalizeData, FindVariableFeatures, ScaleData, RunPCA, ElbowPlot, FindNeighbors, FindClusters, Louvain, RunUMAP, FindAllMarkers, Wilcoxon, marker genes, DimPlot, FeaturePlot, DotPlot, PBMC3k, R]
-produces: [qc_violins_pre.png, qc_scatters_pre.png, qc_violins_post.png, hvg_plot.png, pca_elbow.png, pca_heatmap.png, umap_clusters.png, markers_dotplot.png, markers_featureplot.png, cluster_markers.csv, seurat_processed.rds]
+produces: [qc_violins_pre.png, qc_scatters_pre.png, qc_violins_post.png, hvg_plot.png, pca_elbow.png, pca_heatmap.png, umap_clusters.png, markers_dotplot.png, markers_featureplot.png, cluster_markers.csv, seurat_processed.rds, seurat_processed.lstar.zarr]
 domain: genomics
 source: "Seurat PBMC3k guided clustering tutorial (Satija Lab) — https://satijalab.org/seurat/articles/pbmc3k_tutorial — generalized to a tissue/species-agnostic recipe with data-driven QC thresholds and the v5 Louvain/uwot defaults."
 ---
@@ -774,30 +774,40 @@ markers, sub-clustering, or annotation without re-running 1–6.
 > via the `SingleCellExperiment` bridge — produces a standard `.h5ad`.
 > Details in `references/installation_and_io.md`.
 
-**Offer to explore it interactively.** Once the object is saved, offer to open the
-result in ABA's interactive viewer (pagoda3). Write the viewer store **directly
-from the live Seurat object** with lstar — pure R, no `.h5ad` detour:
+---
+
+## Step 9 — Write the viewer store and share the interactive link
+
+**This is a required final step of every run — not optional, and not something to
+skip once the object is saved.** The user should finish with a clickable way to
+explore the result interactively, not just files on disk. Include this as its own
+step in any plan you present.
+
+Write the pagoda3 viewer store **directly from the live Seurat object** with lstar
+— pure R, no `.h5ad` detour:
 
 ```r
 # Seurat object -> lstar viewer store, in-session (highest fidelity: all
-# reductions/metadata carried across). lstar is pure R here — do NOT route
-# through .h5ad (zellkonverter/sceasy spin up a basilisk/reticulate Python env,
-# which is slow and unnecessary just to view the result).
+# reductions/metadata carried across). lstar is pure R here — do NOT route through
+# .h5ad (zellkonverter/sceasy spin up a basilisk/reticulate Python env, slow and
+# unnecessary just to view the result).
 d <- lstar::read_seurat(obj)
 lstar::lstar_write(d, "seurat_processed.lstar.zarr")
 ```
 
-Then call `open_viewer(file_path="seurat_processed.lstar.zarr")` and present the
-link. You *can* instead hand `open_viewer` the `seurat_processed.rds` directly (ABA
-converts it on launch), but that's a lower-fidelity fallback meant for installs
-without the R stack — prefer the in-session `.lstar.zarr` when you have it. Only
-export `.h5ad` when the goal is a different tool (scanpy, cellxgene), not the ABA
-viewer. Offer once, when the result is ready; if `open_viewer` returns `ok:false`,
-relay the error rather than handing out a dead link.
+Then call `open_viewer(file_path="seurat_processed.lstar.zarr")` and **present the
+returned link in your closing message.** Notes:
+- You *can* instead hand `open_viewer` the `seurat_processed.rds` directly (ABA
+  converts on launch), but that's a lower-fidelity fallback for installs without
+  the R stack — prefer the in-session `.lstar.zarr`.
+- Export `.h5ad` only when the target is a *different* tool (scanpy, cellxgene),
+  never as the route to the ABA viewer.
+- If `open_viewer` returns `ok:false`, relay the error rather than handing out a
+  dead link.
 
 ---
 
-## Batch variant — use INSTEAD of Steps 1–8 when invoked with args="batch"
+## Batch variant — use INSTEAD of Steps 1–9 when invoked with args="batch"
 
 Branch on `$ARGUMENTS == "batch"` at the top of the body. In batch mode the
 canonical step-by-step + figure + report cadence is replaced by ONE
@@ -863,7 +873,9 @@ Summarize:
 - total significant markers, top markers per cluster (subset for chat),
   any cluster with zero markers
 - figures shown to the user (filenames)
-- saved files (`seurat_processed.rds`, `cluster_markers.csv`)
+- saved files (`seurat_processed.rds`, `cluster_markers.csv`, `seurat_processed.lstar.zarr`)
+- **the interactive viewer link** from Step 9 (`open_viewer` on the
+  `.lstar.zarr`) — always include it; if you couldn't produce one, say why
 - caveats: doublet detection not run, batch effects (single-sample so
   irrelevant unless the sample is itself a multiplexed pool), weak markers,
   over/under-clustering
