@@ -6,7 +6,7 @@ invocation: interactive+batch
 requires_tools: [run_r]
 capabilities_needed: [Seurat]
 keywords: [Seurat, Seurat v5, scRNA-seq, single cell, single-cell, QC, percent.mt, NormalizeData, FindVariableFeatures, ScaleData, RunPCA, ElbowPlot, FindNeighbors, FindClusters, Louvain, RunUMAP, FindAllMarkers, Wilcoxon, marker genes, DimPlot, FeaturePlot, DotPlot, PBMC3k, R]
-produces: [qc_violins_pre.png, qc_scatters_pre.png, qc_violins_post.png, hvg_plot.png, pca_elbow.png, pca_heatmap.png, umap_clusters.png, markers_dotplot.png, markers_featureplot.png, cluster_markers.csv, seurat_processed.rds]
+produces: [qc_violins_pre.png, qc_scatters_pre.png, qc_violins_post.png, hvg_plot.png, pca_elbow.png, pca_heatmap.png, umap_clusters.png, markers_dotplot.png, markers_featureplot.png, cluster_markers.csv, seurat_processed.rds, seurat_processed.lstar.zarr]
 domain: genomics
 source: "Seurat PBMC3k guided clustering tutorial (Satija Lab) — https://satijalab.org/seurat/articles/pbmc3k_tutorial — generalized to a tissue/species-agnostic recipe with data-driven QC thresholds and the v5 Louvain/uwot defaults."
 ---
@@ -70,9 +70,12 @@ suppressPackageStartupMessages({
   library(tidyr)
 })
 
-# Optional Wilcoxon accelerator — auto-detected by Seurat v5; install once if missing.
+# Wilcoxon accelerator — Seurat v5 auto-uses presto (presto::wilcoxauc) for
+# FindMarkers/FindAllMarkers; WITHOUT it, Wilcoxon falls back to a slow looping
+# base-R implementation (>10 min vs <1 s on a small dataset). Shipped with Seurat
+# by default (r-environment.yml); self-heal if a deployment predates that.
 if (!requireNamespace("presto", quietly = TRUE)) {
-  # devtools::install_github("immunogenomics/presto")
+  try(ensure_capability("presto"), silent = TRUE)   # prebuilt r-presto (bioconda)
 }
 
 stopifnot(packageVersion("Seurat") >= "5.0.0")  # this recipe is v5-only
@@ -746,30 +749,54 @@ heuristics, and the manual vs reference-mapped annotation paths, read
 
 ---
 
-## Step 8 — Save the processed object
+## Step 8 — Save & deliver: object, viewer store, and interactive link
+
+The closing step *delivers* the result — save the object, write the viewer store,
+and hand the user a **clickable way to explore it**, not just files on disk.
+Present this as the final "save & deliver" step of your plan; the interactive
+viewer link comes from here, so don't drop it.
 
 ```r
+# 1. Save the processed object.
 saveRDS(obj, file = "seurat_processed.rds")
-
-# Verify the write — size + round-trip dim.
 sz <- file.info("seurat_processed.rds")$size / 1e6
 cat(sprintf("Wrote seurat_processed.rds (%.1f MB)\n", sz))
 obj_check <- readRDS("seurat_processed.rds")
 stopifnot(identical(dim(obj_check), dim(obj)))
 rm(obj_check); invisible(gc())
+
+# 2. Write the pagoda3 viewer store DIRECTLY from the live Seurat object with
+#    lstar — pure R, highest fidelity (all reductions/metadata carried across).
+#    Do NOT route through .h5ad: zellkonverter/sceasy spin up a basilisk/reticulate
+#    Python env — slow and pointless just to view the result.
+d <- lstar::read_seurat(obj)
+lstar::lstar_write_viewer(d, "seurat_processed.lstar.zarr")   # viewer=TRUE: precomputes
+# DE / variable-genes / cell-major counts in R so pagoda3 opens it *optimized* (no
+# "Not viewer-optimized" banner). Needs the clustering set as Idents (Step 6). Plain
+# lstar_write() also works but leaves the store un-optimized.
 ```
 
-The `.rds` carries the full `RNA` assay (counts, data, scale.data layers),
-the `pca` and `umap` reductions, the `RNA_nn` / `RNA_snn` graphs, the
-`seurat_clusters` column, and the HVGs. A follow-up session resumes from
-markers, sub-clustering, or annotation without re-running 1–6.
+Then **call `open_viewer(file_path="seurat_processed.lstar.zarr")` and present the
+returned link in your closing message** — a required part of delivering the result,
+not optional. Notes:
+- You *can* instead hand `open_viewer` the `seurat_processed.rds` directly (ABA
+  converts on launch), but that's a lower-fidelity fallback for installs without
+  the R stack — prefer the in-session `.lstar.zarr`.
+- Export `.h5ad` only when the target is a *different* tool (scanpy, cellxgene),
+  never as the route to the ABA viewer.
+- If `open_viewer` returns `ok:false`, relay the error rather than handing out a
+  dead link.
 
-> **Faster I/O on large objects.** `qs::qsave(obj, "seurat_processed.qs")`
-> is 2–3× faster than `saveRDS` for big objects and produces smaller files.
+The `.rds` carries the full `RNA` assay (counts, data, scale.data layers), the
+`pca`/`umap` reductions, the `RNA_nn`/`RNA_snn` graphs, `seurat_clusters`, and the
+HVGs — a follow-up session resumes from markers/sub-clustering/annotation without
+re-running 1–6.
 
-> **Handing off to scanpy / Python.** Use `zellkonverter` (Bioconductor)
-> via the `SingleCellExperiment` bridge — produces a standard `.h5ad`.
-> Details in `references/installation_and_io.md`.
+> **Faster I/O on large objects.** `qs::qsave(obj, "seurat_processed.qs")` is
+> 2–3× faster than `saveRDS` for big objects and produces smaller files.
+> **Handing off to scanpy / Python?** `zellkonverter` (Bioconductor) via the
+> `SingleCellExperiment` bridge gives a standard `.h5ad` — that's for *other tools*,
+> not the ABA viewer. Details in `references/installation_and_io.md`.
 
 ---
 
@@ -839,7 +866,9 @@ Summarize:
 - total significant markers, top markers per cluster (subset for chat),
   any cluster with zero markers
 - figures shown to the user (filenames)
-- saved files (`seurat_processed.rds`, `cluster_markers.csv`)
+- saved files (`seurat_processed.rds`, `cluster_markers.csv`, `seurat_processed.lstar.zarr`)
+- **the interactive viewer link** from Step 8 (`open_viewer` on the
+  `.lstar.zarr`) — always include it; if you couldn't produce one, say why
 - caveats: doublet detection not run, batch effects (single-sample so
   irrelevant unless the sample is itself a multiplexed pool), weak markers,
   over/under-clustering

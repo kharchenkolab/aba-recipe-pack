@@ -1,7 +1,7 @@
 ---
 name: scrna-de-methodology
 description: Decision guide for differential expression in scRNA-seq — picks between per-cell tests (Wilcoxon / MAST / LR / ROC) and pseudobulk DESeq2/edgeR depending on whether the question is cluster markers, within-sample two-group, or cross-sample condition effects. Settles the per-cell-vs-pseudobulk question via Squair 2021. Use when the user asks "Wilcoxon or MAST or DESeq2 for my scRNA DE?" or "per-cell or pseudobulk?".
-when_to_use: User has an scRNA-seq dataset (one sample or many) and wants to pick a DE test. Triggers: "DE in scRNA-seq", "per-cell vs pseudobulk", "Wilcoxon vs MAST vs DESeq2", "FindMarkers test.use", "condition DE on my Seurat/anndata object", "stim vs ctrl across donors".
+when_to_use: 'User has an scRNA-seq dataset (one sample or many) and wants to pick a DE test. Triggers: "DE in scRNA-seq", "per-cell vs pseudobulk", "Wilcoxon vs MAST vs DESeq2", "FindMarkers test.use", "condition DE on my Seurat/anndata object", "stim vs ctrl across donors".'
 avoid_when: Bulk RNA-seq DE (use bulk-rnaseq-de / deseq2-r directly — no decision needed). Spatial / multiplexed-imaging DE (different statistical regime). Variant/allele-specific expression. The user wants the runnable recipe — point them at the recipes named in §4 + §7.
 invocation: interactive
 kind: knowhow_draft

@@ -59,3 +59,8 @@ Caution: deep sub-clustering can split on noise — validate splits with markers
 Pick the resolution that best matches expected biology, then annotate with **`bp-annotation`**.
 If batches are present, build the graph on an integrated embedding from **`bp-data-integration`**
 (`use_rep="X_scVI"` / `"X_pca_harmony"`) before clustering.
+
+Once clustered, **proactively offer an interactive view**: call
+`open_viewer(file_path=<your saved .h5ad>)` and present the returned link so the
+user can explore clusters + markers in pagoda3 (offer it once, after reporting the
+result). Format/sharing choices → **`scrna-viewing-and-interchange`**.

@@ -71,3 +71,8 @@ ABA also ships **`annotate-celltype-scrna`** and **`annotate-celltype-with-panhu
 turnkey annotation, and **`unsupervised-celltype-transfer-between-scrna-datasets`** for transfer.
 Annotated labels feed condition analyses: **`bp-differential-expression`**,
 **`bp-compositional-analysis`**, **`bp-gsea-pathway`**.
+
+Once annotated, **proactively offer an interactive view**: call
+`open_viewer(file_path=<your saved .h5ad>)` and present the returned link so the
+user can explore the labels on the UMAP in pagoda3 (offer it once, after reporting
+the result). Format/sharing choices → **`scrna-viewing-and-interchange`**.
