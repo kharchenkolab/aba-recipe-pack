@@ -72,7 +72,13 @@ turnkey annotation, and **`unsupervised-celltype-transfer-between-scrna-datasets
 Annotated labels feed condition analyses: **`bp-differential-expression`**,
 **`bp-compositional-analysis`**, **`bp-gsea-pathway`**.
 
-Once annotated, **proactively offer an interactive view**: call
-`open_viewer(file_path=<your saved .h5ad>)` and present the returned link so the
-user can explore the labels on the UMAP in pagoda3 (offer it once, after reporting
-the result). Format/sharing choices → **`scrna-viewing-and-interchange`**.
+Once annotated, write a viewer-optimized store from the in-memory object and offer
+it (opens instantly — pre-optimized, no on-launch conversion):
+```python
+import lstar
+lstar.write(lstar.read_anndata(adata), "annotated.lstar.zarr", viewer=True)  # viewer@0.1
+```
+**proactively offer** `open_viewer(file_path="annotated.lstar.zarr")` and present the
+returned link so the user can explore the labels on the UMAP in pagoda3 (offer it
+once, after reporting the result). Keep raw counts in adata so the precomputed stats
+use real counts. Format/sharing choices → **`scrna-viewing-and-interchange`**.

@@ -423,11 +423,18 @@ included raw counts and normalized expression.
 
 ### Offer an interactive view
 
-**Required final step — do this once the result is ready, not optional.** Once
-`pagoda2_processed.h5ad` is written, **proactively offer to open the result in
-ABA's interactive viewer** — call `open_viewer(file_path="pagoda2_processed.h5ad")`
-and present the returned link in your closing message. Point the viewer at the
-**`.h5ad`** (or an `.lstar.zarr` store — see `references/export_and_interop.md`),
+**Required final step — do this once the result is ready, not optional.** Write a
+viewer-optimized `.lstar.zarr` **directly from the live Pagoda2 object** (highest
+fidelity — the full object, not a re-read of the `.h5ad`), then offer it:
+
+```r
+d <- lstar::read_pagoda2(p2)                              # live Pagoda2 -> lstar Dataset
+lstar::lstar_write_viewer(d, "pagoda2_processed.lstar.zarr")   # viewer@0.1 (precomputed)
+```
+
+Then **call `open_viewer(file_path="pagoda2_processed.lstar.zarr")`** and present the
+link in your closing message — it opens instantly (pre-optimized, no on-launch
+conversion). Point the viewer at the **`.lstar.zarr`** (or the native `.h5ad`),
 **not** the pagoda2 `.rds`: ABA's on-launch converter reads only Seurat/SCE `.rds`,
 so a raw pagoda2 object won't open. If `open_viewer` returns `ok:false`, relay the
 error rather than handing out a dead link.

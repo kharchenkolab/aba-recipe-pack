@@ -671,17 +671,25 @@ tissue, or QC didn't catch ambient RNA contamination.
 ### 8. Save the processed object
 
 ```python
-adata.write_h5ad('processed.h5ad')
+adata.write_h5ad('processed.h5ad')          # universal interchange (scanpy/cellxgene)
 print(f"saved: processed.h5ad ({os.path.getsize('processed.h5ad')/1e6:.1f} MB)")
 print(adata)
+
+# Viewer store — write it NOW, optimized, from the in-memory object so the link is
+# instant (no on-launch conversion). viewer=True precomputes DE / variable genes /
+# cell-major counts. Keep raw counts in adata (.layers['counts'] or .raw) so those
+# stats use real counts; lstar falls back to lognorm only if none are present.
+import lstar
+lstar.write(lstar.read_anndata(adata), 'processed.lstar.zarr', viewer=True)
 ```
 
 ### Offer an interactive view
 
-`processed.h5ad` is a clustered single-cell result — **proactively offer to open it
-in the viewer**: call `open_viewer(file_path='processed.h5ad')` and present the
-returned link (a launch button) so the user can explore the UMAP, markers, and
-metadata in pagoda3. Conversion is on-demand and cheap; offer it once, right after
+`processed.lstar.zarr` is a clustered, viewer-optimized single-cell result —
+**proactively offer to open it**: call `open_viewer(file_path='processed.lstar.zarr')`
+and present the returned link (a launch button) so the user can explore the UMAP,
+markers, and metadata in pagoda3. It opens instantly (already optimized — no
+"Not viewer-optimized" banner, no per-launch conversion). Offer once, right after
 you report the result. Format/sharing choices → **`scrna-viewing-and-interchange`**.
 
 ---

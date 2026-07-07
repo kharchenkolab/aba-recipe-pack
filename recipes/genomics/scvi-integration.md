@@ -129,7 +129,14 @@ model.save(os.path.join(DATA, "scvi_model"), overwrite=True)
 - **scvi-label-transfer-scanvi** — annotate cells / transfer labels.
 - **scvi-de** — differential expression from this trained model.
 - **scvi-reference-mapping** — map new query data onto this model (scArches).
-- **View it** — save the integrated object (`adata.write_h5ad("integrated.h5ad")`,
-  keeping `X_scVI` + `leiden_scVI`), then **proactively offer**
-  `open_viewer(file_path="integrated.h5ad")` and present the link so the user can
-  check batch mixing / biology on the UMAP. Format/sharing → **`scrna-viewing-and-interchange`**.
+- **View it** — save the integrated object for interchange
+  (`adata.write_h5ad("integrated.h5ad")`, keeping `X_scVI` + `leiden_scVI`), then
+  write a viewer-optimized store from the in-memory object and offer THAT:
+  ```python
+  import lstar
+  lstar.write(lstar.read_anndata(adata), "integrated.lstar.zarr", viewer=True)
+  ```
+  **proactively offer** `open_viewer(file_path="integrated.lstar.zarr")` and present
+  the link so the user can check batch mixing / biology on the UMAP — it opens
+  instantly (pre-optimized, no on-launch conversion). Keep raw counts in adata so
+  the precomputed stats use real counts. Format/sharing → **`scrna-viewing-and-interchange`**.

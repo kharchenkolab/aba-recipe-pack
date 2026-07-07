@@ -75,13 +75,26 @@ viewing matters.** `.lstar.zarr` is a good interchange target on its own merits
 
 ## How to save / convert
 
-From scanpy / AnnData (Python):
+**Preferred pattern — emit the viewer store IN-SESSION and point `open_viewer` at
+it.** A recipe that just produced a result should write a *viewer-optimized*
+`.lstar.zarr` from the in-memory object at the end of the session, and offer
+`open_viewer(file_path="…​.lstar.zarr")`. Then the link opens instantly (already
+optimized — no banner, no on-launch conversion) and it's highest-fidelity (built
+from the live object, using its raw counts). ABA *can* also convert an `.h5ad`/`.rds`
+on the fly when the user opens one directly — but that's the **fallback** for
+ad-hoc files, not the path recipes should rely on.
+
+From scanpy / AnnData (Python) — the analog of R's `lstar_write_viewer`:
 
 ```python
-adata.write_h5ad("result.h5ad")                 # universal
+adata.write_h5ad("result.h5ad")                 # universal interchange
 import lstar
-lstar.convert_anndata("result.h5ad", "result.lstar.zarr")   # lstar-sc (in ABA's base env)
+lstar.write(lstar.read_anndata(adata), "result.lstar.zarr", viewer=True)  # optimized store
 ```
+
+`viewer=True` precomputes DE / variable genes / cell-major counts. Keep raw counts
+in `adata` (`.layers['counts']` or `.raw`) so those stats use real counts; lstar-sc
+≥0.1.7 falls back to log-normalized only when no raw counts are present.
 
 From R objects, **write the `.lstar.zarr` store directly from the live object with
 lstar** — it's pure R, highest-fidelity (all reductions/layers/metadata carried
