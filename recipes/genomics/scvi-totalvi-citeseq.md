@@ -5,7 +5,7 @@ when_to_use: CITE-seq / REAP-seq data with paired transcriptome (RNA counts) and
 requires_tools: [run_python]
 capabilities_needed: [scvi-tools, scanpy, anndata]
 keywords: [totalVI, TOTALVI, CITE-seq, ADT, antibody derived tags, surface protein, protein expression, multimodal, scvi-tools, protein foreground, denoised expression, joint embedding, batch integration]
-produces: [totalvi_latent.npy, denoised_rna.csv, denoised_protein.csv, protein_foreground.csv, totalvi_de.csv, totalvi_model/]
+produces: [totalvi_latent.npy, denoised_rna.csv, denoised_protein.csv, protein_foreground.csv, totalvi_de.csv, totalvi_model/, totalvi.lstar.zarr]
 domain: genomics
 source: "scvi-tools 1.3.3 tutorial — CITE-seq analysis with totalVI (docs.scvi-tools.org/en/1.3.3/tutorials/notebooks/multimodal/totalVI.html)"
 ---
@@ -103,6 +103,21 @@ model.save(os.path.join(DATA, "totalvi_model"), overwrite=True)
 - Prefer `get_protein_foreground_probability` over hard ADT thresholds to gate
   positive populations — it accounts for ambient background.
 - Heavier to train than scVI; budget GPU time / run as a job.
+
+## Offer an interactive view
+
+Put cells in a 2-D space on the totalVI latent (if you haven't), then write a viewer store
+and **proactively offer to open it**:
+```python
+import scanpy as sc, lstar
+sc.pp.neighbors(adata, use_rep="X_totalVI"); sc.tl.umap(adata)   # embedding for the viewer
+lstar.write(lstar.read_anndata(adata), "totalvi.lstar.zarr", viewer=True)  # RNA + denoised protein + latent
+```
+Then call `open_viewer(file_path="totalvi.lstar.zarr")` and present the returned link so the
+user can explore RNA + surface-protein signal on the UMAP in pagoda3 — it opens instantly
+(pre-optimized, no on-launch conversion, no node needed). Offer once, after you report the
+result. Keep raw counts in `adata` (`.layers['counts']`) so precomputed stats use real
+counts. Format / sharing → **`scrna-viewing-and-interchange`**.
 
 ## Related
 - RNA-only: **scvi-integration**. DE detail: **scvi-de**. Reference mapping:

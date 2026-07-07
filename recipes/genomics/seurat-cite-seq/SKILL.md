@@ -6,7 +6,7 @@ invocation: interactive+batch
 requires_tools: [run_r]
 capabilities_needed: [Seurat]
 keywords: [Seurat, CITE-seq, ADT, antibody derived tags, surface protein, multimodal, Antibody Capture, Gene Expression, CLR, centered log ratio, NormalizeData, FeatureScatter, biaxial, adt_, rna_, DefaultAssay, CreateAssayObject, R, v5]
-produces: [adt_qc_violins.png, umap_rna_clusters.png, adt_biaxial.png, adt_featureplot.png, adt_vs_rna.png, cite_processed.rds]
+produces: [adt_qc_violins.png, umap_rna_clusters.png, adt_biaxial.png, adt_featureplot.png, adt_vs_rna.png, cite_processed.rds, cite_processed.lstar.zarr]
 domain: genomics
 source: "Seurat CITE-seq multimodal vignette (Satija Lab) — satijalab.org/seurat/articles/multimodal_vignette (Seurat 5.5.0); Stoeckius et al. 2017 (CITE-seq, Nat. Methods)"
 ---
@@ -546,3 +546,19 @@ Summarize:
 - `bp-cite-seq` — best-practice surface-protein chapter (sample-aware MAD
   QC, DSB normalization, isotype controls); read when the panel is large
   and the dataset is from a multi-donor study.
+
+## Offer an interactive view
+
+Write a viewer-optimized store DIRECTLY from the live Seurat object with lstar (pure R,
+highest fidelity — do NOT route through `.h5ad`) and **proactively offer to open it** (a
+required part of delivering the result):
+```r
+DefaultAssay(obj) <- "RNA"        # RNA expression view (ADT was the last active assay)
+d <- lstar::read_seurat(obj)
+lstar::lstar_write_viewer(d, "cite_processed.lstar.zarr")   # precomputes DE / HVGs /
+                                                            # cell-major counts (optimized)
+```
+Then call `open_viewer(file_path="cite_processed.lstar.zarr")` and present the returned link
+so the user can explore the RNA clusters + metadata on the UMAP in pagoda3 — it opens
+instantly (pre-optimized, no on-launch conversion). If `open_viewer` returns `ok:false`,
+relay the error rather than a dead link. Format / sharing → **`scrna-viewing-and-interchange`**.

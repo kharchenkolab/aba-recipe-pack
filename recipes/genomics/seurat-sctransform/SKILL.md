@@ -6,7 +6,7 @@ invocation: interactive+batch
 requires_tools: [run_r]
 capabilities_needed: [Seurat, glmGamPoi]
 keywords: [Seurat, Seurat v5, SCTransform, sctransform, regularized negative binomial, Pearson residuals, scRNA-seq, single cell, single-cell, normalization, percent.mt, glmGamPoi, vst.flavor, v2, SCT assay, PrepSCTFindMarkers, FindAllMarkers, RunPCA, RunUMAP, FindClusters, low depth, heterogeneous depth, R]
-produces: [qc_violins_pre.png, qc_violins_post.png, sct_residuals.png, pca_elbow.png, umap_clusters.png, markers_dotplot.png, markers_featureplot.png, cluster_markers.csv, seurat_sct_processed.rds]
+produces: [qc_violins_pre.png, qc_violins_post.png, sct_residuals.png, pca_elbow.png, umap_clusters.png, markers_dotplot.png, markers_featureplot.png, cluster_markers.csv, seurat_sct_processed.rds, seurat_sct_processed.lstar.zarr]
 domain: genomics
 source: "Seurat SCTransform vignette (Satija Lab) — https://satijalab.org/seurat/articles/sctransform_vignette — plus SCTransform / PrepSCTFindMarkers v5 reference pages for argument defaults. Method paper: Hafemeister & Satija 2019, Genome Biology (regularized NB); Lause et al. 2021 (v2 flavor)."
 ---
@@ -793,3 +793,19 @@ Summarize:
   recipe covers this.
 - `scrna-qc-clustering` — scanpy / Python equivalent. For the
   Pearson-residuals analog in scanpy, see `pp.experimental.normalize_pearson_residuals`.
+
+## Offer an interactive view
+
+Write a viewer-optimized store DIRECTLY from the live Seurat object with lstar (pure R,
+highest fidelity — do NOT route through `.h5ad`) and **proactively offer to open it** (a
+required part of delivering the result):
+```r
+DefaultAssay(obj) <- "RNA"        # view raw-count RNA, not SCT residuals
+d <- lstar::read_seurat(obj)
+lstar::lstar_write_viewer(d, "seurat_sct_processed.lstar.zarr")   # precomputes DE / HVGs /
+                                                                  # cell-major counts (optimized)
+```
+Then call `open_viewer(file_path="seurat_sct_processed.lstar.zarr")` and present the returned
+link so the user can explore the UMAP, clusters, and markers in pagoda3 — it opens instantly
+(pre-optimized, no on-launch conversion). If `open_viewer` returns `ok:false`, relay the
+error rather than a dead link. Format / sharing → **`scrna-viewing-and-interchange`**.

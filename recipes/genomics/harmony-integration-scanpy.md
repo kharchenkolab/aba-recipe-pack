@@ -5,7 +5,7 @@ when_to_use: Two or more scRNA-seq samples/conditions/donors (10x lanes, stim vs
 requires_tools: [run_python]
 capabilities_needed: [scanpy, harmonypy, leidenalg, anndata]
 keywords: [harmony, harmonypy, sc.external.pp.harmony_integrate, batch correction, batch integration, sample integration, scanpy, X_pca_harmony, multi-sample, scRNA-seq, donor effect, UMAP, leiden, single cell, integrate samples, batch effect, concat, batch key, Z_corr]
-produces: [umap_before_harmony.png, umap_after_harmony.png, umap_leiden.png, leiden_clusters.csv, integrated.h5ad]
+produces: [umap_before_harmony.png, umap_after_harmony.png, umap_leiden.png, leiden_clusters.csv, integrated.h5ad, integrated.lstar.zarr]
 domain: genomics
 resource_profile: small-medium (~1-2 min for a few 10x samples, ~30-80k cells)
 source: "scanpy external API (sc.external.pp.harmony_integrate, backed by harmonypy / Korsunsky 2019); Python counterpart of the R/Seurat harmony-integration recipe"
@@ -178,6 +178,21 @@ diagnostic demands it.
   `harmonypy.run_harmony` + manual `Z_corr.T` extraction.
 - **Honor the requested scope** — don't tack on annotation/reports the user
   didn't ask for; stop at the integrated object + mixing plots.
+
+## Offer an interactive view
+
+`integrated.lstar.zarr` is a batch-corrected, clustered result — write it from the
+in-memory object and **proactively offer to open it** (a required part of delivering
+the result):
+```python
+import lstar
+lstar.write(lstar.read_anndata(adata), 'integrated.lstar.zarr', viewer=True)  # viewer@0.1: precomputes DE / HVGs / cell-major counts
+```
+Then call `open_viewer(file_path='integrated.lstar.zarr')` and present the returned link
+so the user can check batch mixing and biology on the UMAP in pagoda3 — it opens instantly
+(pre-optimized, no on-launch conversion, no node needed). Offer once, right after you
+report the result. Keep raw counts in `adata` (`.layers['counts']` or `.raw`) so the
+precomputed stats use real counts. Format / sharing → **`scrna-viewing-and-interchange`**.
 
 ## Cross-links
 - **harmony-integration** — the R/Seurat counterpart (`RunHarmony`); prefer it

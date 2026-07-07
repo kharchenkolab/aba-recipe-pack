@@ -5,7 +5,7 @@ when_to_use: "Single-cell multiome (10x Multiome — paired RNA + ATAC per cell)
 requires_tools: [run_python]
 capabilities_needed: [scvi-tools, scanpy, anndata]
 keywords: [MultiVI, MULTIVI, multiome, scATAC, ATAC-seq, peaks, paired multiomic, unpaired, RNA ATAC integration, scvi-tools, organize_multiome_anndatas, n_genes, n_regions, modality, PeakVI]
-produces: [multivi_latent.npy, multivi_umap.png, multivi_leiden.csv, imputed_expression.csv, multivi_model/]
+produces: [multivi_latent.npy, multivi_umap.png, multivi_leiden.csv, imputed_expression.csv, multivi_model/, multivi.lstar.zarr]
 domain: genomics
 source: "scvi-tools 1.3.3 tutorial — Joint analysis of paired and unpaired multiomic data with MultiVI (docs.scvi-tools.org/en/1.3.3/tutorials/notebooks/multimodal/MultiVI_tutorial.html)"
 ---
@@ -102,6 +102,20 @@ model.save(os.path.join(DATA, "multivi_model"), overwrite=True)
 - Raw counts both modalities; ATAC peaks are binary-ish/sparse — don't pre-binarize
   unless you know you need to (see PoissonVI for fragment counts).
 - Heaviest training in this family — budget GPU/job time accordingly.
+
+## Offer an interactive view
+
+`multivi.lstar.zarr` carries the joint RNA+ATAC clusters on the MultiVI embedding — write
+it and **proactively offer to open it**:
+```python
+import lstar
+lstar.write(lstar.read_anndata(adata), "multivi.lstar.zarr", viewer=True)  # viewer@0.1: precomputes DE / HVGs / cell-major counts
+```
+Then call `open_viewer(file_path="multivi.lstar.zarr")` and present the returned link so
+the user can explore the joint clusters + imputed expression on the UMAP in pagoda3 — it
+opens instantly (pre-optimized, no on-launch conversion, no node needed). Offer once, after
+you report the result. Keep raw counts in `adata` (`.layers['counts']`) so precomputed stats
+use real counts. Format / sharing → **`scrna-viewing-and-interchange`**.
 
 ## Related
 - RNA-only: **scvi-integration**. ATAC-only: PeakVI. DE: **scvi-de** pattern applies

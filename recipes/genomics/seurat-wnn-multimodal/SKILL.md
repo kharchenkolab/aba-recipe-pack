@@ -6,7 +6,7 @@ invocation: interactive+batch
 requires_tools: [run_r]
 capabilities_needed: [Seurat]
 keywords: [Seurat, WNN, weighted nearest neighbor, multimodal clustering, FindMultiModalNeighbors, wsnn, wknn, weighted.nn, modality weight, RNA.weight, joint clustering, CITE-seq, RNA ADT, RNA ATAC, multiome, bmcite, R, v5]
-produces: [umap_wnn_clusters.png, umap_rna_only.png, umap_adt_only.png, modality_weights.png, wnn_processed.rds]
+produces: [umap_wnn_clusters.png, umap_rna_only.png, umap_adt_only.png, modality_weights.png, wnn_processed.rds, wnn_processed.lstar.zarr]
 domain: genomics
 source: "Seurat Weighted Nearest Neighbor (WNN) vignette (Satija Lab) — satijalab.org/seurat/articles/weighted_nearest_neighbor_analysis (Seurat 5.5.0, bmcite dataset); Hao et al. 2021, Cell 184:3573 (the WNN paper)"
 ---
@@ -473,3 +473,19 @@ Summarize:
   instead of computing WNN from scratch.
 - `seurat-scrna-v2` — the RNA-only workflow that produces the `pca`
   reduction WNN consumes.
+
+## Offer an interactive view
+
+Write a viewer-optimized store DIRECTLY from the live Seurat object with lstar (pure R,
+highest fidelity — do NOT route through `.h5ad`) and **proactively offer to open it** (a
+required part of delivering the result):
+```r
+DefaultAssay(obj) <- "RNA"        # RNA expression view; the WNN clusters ride along in metadata
+d <- lstar::read_seurat(obj)
+lstar::lstar_write_viewer(d, "wnn_processed.lstar.zarr")   # precomputes DE / HVGs /
+                                                           # cell-major counts (optimized)
+```
+Then call `open_viewer(file_path="wnn_processed.lstar.zarr")` and present the returned link
+so the user can explore the WNN clusters on the joint UMAP in pagoda3 — it opens instantly
+(pre-optimized, no on-launch conversion). If `open_viewer` returns `ok:false`, relay the
+error rather than a dead link. Format / sharing → **`scrna-viewing-and-interchange`**.

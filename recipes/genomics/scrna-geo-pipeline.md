@@ -6,7 +6,7 @@ avoid_when: Raw FASTQ input (no processed matrices available); multi-sample inte
 requires_tools: [Skill, run_python]
 capabilities_needed: [scanpy, leidenalg]
 keywords: [scrna, scRNA-seq, single cell, GEO, end-to-end, full pipeline, fetch and process, annotated clusters, cell types, GSE, GSM]
-produces: [counts/, processed.h5ad, umap_clusters.png, cluster_annotations.csv]
+produces: [counts/, processed.h5ad, processed.lstar.zarr, umap_clusters.png, cluster_annotations.csv]
 domain: genomics
 ---
 
@@ -49,3 +49,9 @@ This recipe is an **orchestrator**: it does no analysis itself. It tells you whi
 - Trajectory inference, RNA velocity (`bp-trajectory-inference`, `bp-rna-velocity`).
 
 Skip this orchestrator if the task is just one of the three stages — go straight to that sub-Skill instead.
+
+When the processing stage finishes it writes `processed.lstar.zarr` (the `scrna-qc-clustering`
+sub-recipe does this) — **proactively offer the interactive view**: call
+`open_viewer(file_path='processed.lstar.zarr')` and present the link so the user can explore
+clusters/markers in pagoda3, right after you report the result. Format / sharing →
+**`scrna-viewing-and-interchange`**.

@@ -58,3 +58,9 @@ with `sc.pp.neighbors(adata, use_rep="X_pca_harmony")` and `sc.tl.leiden` /
 multi-sample flow (load→concat→QC→PCA→integrate→cluster, with before/after mixing
 plots) see **harmony-integration-scanpy**; for the R/Seurat counterpart see
 **harmony-integration**.
+
+Once you've clustered on the corrected embedding, write a viewer-optimized store and
+**proactively offer** an interactive view —
+`lstar.write(lstar.read_anndata(adata), 'integrated.lstar.zarr', viewer=True)` then
+`open_viewer(file_path='integrated.lstar.zarr')` (see **harmony-integration-scanpy** →
+*Offer an interactive view*). Format / sharing → **`scrna-viewing-and-interchange`**.

@@ -5,7 +5,7 @@ when_to_use: You have a partially-labeled scRNA-seq object (some cells annotated
 requires_tools: [run_python]
 capabilities_needed: [scvi-tools, scanpy, anndata]
 keywords: [scANVI, scvi-tools, label transfer, cell type annotation, semi-supervised, predict, reference query, seed labeling, Tabula Muris, X_scANVI, unlabeled_category, from_scvi_model]
-produces: [scanvi_predictions.csv, scanvi_latent.npy, prediction_umap.png, scanvi_model/]
+produces: [scanvi_predictions.csv, scanvi_latent.npy, prediction_umap.png, scanvi_model/, scanvi_labeled.lstar.zarr]
 domain: genomics
 source: "scvi-tools 1.3.3 tutorial — Integration and label transfer with Tabula Muris / Seed labeling with scANVI (docs.scvi-tools.org/en/1.3.3/tutorials/notebooks/scrna/tabula_muris.html)"
 ---
@@ -96,6 +96,20 @@ scanvi_model.save(os.path.join(DATA, "scanvi_model"), overwrite=True)
   types get mapped to the nearest known label. Inspect low-confidence cells; flag
   potential novel populations rather than trusting the forced label.
 - Quality depends on good upstream scVI integration — verify mixing first.
+
+## Offer an interactive view
+
+`scanvi_labeled.lstar.zarr` carries the predicted labels + confidence + the scANVI
+embedding — write it and **proactively offer to open it**:
+```python
+import lstar
+lstar.write(lstar.read_anndata(adata), "scanvi_labeled.lstar.zarr", viewer=True)  # viewer@0.1: precomputes DE / HVGs / cell-major counts
+```
+Then call `open_viewer(file_path="scanvi_labeled.lstar.zarr")` and present the returned
+link so the user can inspect the predicted labels + confidence on the UMAP in pagoda3 —
+it opens instantly (pre-optimized, no on-launch conversion, no node needed). Offer once,
+after you report the result. Keep raw counts in `adata` (`.layers['counts']` / `.raw`) so
+precomputed stats use real counts. Format / sharing → **`scrna-viewing-and-interchange`**.
 
 ## Related
 - Upstream: **scvi-integration** (the scVI model this builds on).

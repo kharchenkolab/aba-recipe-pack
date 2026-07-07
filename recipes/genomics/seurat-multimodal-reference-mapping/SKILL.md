@@ -6,7 +6,7 @@ invocation: interactive+batch
 requires_tools: [run_r]
 capabilities_needed: [Seurat]
 keywords: [Seurat, reference mapping, Azimuth, multimodal reference, FindTransferAnchors, MapQuery, supervised PCA, spca, reference.reduction, predicted celltype, celltype.l1, celltype.l2, predicted_ADT, ProjectUMAP, IntegrateEmbeddings, TransferData, ref.umap, R, v5]
-produces: [umap_ref_celltype_l1.png, umap_ref_celltype_l2.png, predicted_score_hist.png, predicted_adt_featureplot.png, query_mapped.rds]
+produces: [umap_ref_celltype_l1.png, umap_ref_celltype_l2.png, predicted_score_hist.png, predicted_adt_featureplot.png, query_mapped.rds, query_mapped.lstar.zarr]
 domain: genomics
 source: "Seurat multimodal reference mapping vignette (Satija Lab) — satijalab.org/seurat/articles/multimodal_reference_mapping. Reference building: Hao et al. Cell 2021 (PBMC 162k CITE-seq atlas)."
 ---
@@ -557,3 +557,20 @@ Summarize:
 - `seurat-scrna-v2` — the RNA-only single-sample workflow; run for
   quality control of the query BEFORE mapping (low-quality cells map
   confidently to nonsense labels).
+
+## Offer an interactive view
+
+Write a viewer-optimized store DIRECTLY from the live (mapped) Seurat object with lstar
+(pure R, highest fidelity — do NOT route through `.h5ad`) and **proactively offer to open
+it** (a required part of delivering the result):
+```r
+DefaultAssay(query) <- "RNA"      # RNA view; predicted labels + scores ride along in metadata
+d <- lstar::read_seurat(query)
+lstar::lstar_write_viewer(d, "query_mapped.lstar.zarr")   # precomputes DE / HVGs /
+                                                          # cell-major counts (optimized)
+```
+Then call `open_viewer(file_path="query_mapped.lstar.zarr")` and present the returned link
+so the user can inspect the predicted cell types + mapping scores on the query UMAP in
+pagoda3 — it opens instantly (pre-optimized, no on-launch conversion). If `open_viewer`
+returns `ok:false`, relay the error rather than a dead link. Format / sharing →
+**`scrna-viewing-and-interchange`**.

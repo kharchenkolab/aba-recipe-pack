@@ -7,7 +7,7 @@ invocation: interactive+batch
 requires_tools: [run_r]
 capabilities_needed: [Seurat]
 keywords: [Seurat, Seurat v5, integration, IntegrateLayers, CCAIntegration, RPCAIntegration, HarmonyIntegration, JointPCAIntegration, FastMNNIntegration, scVIIntegration, batch correction, batch effect, multi-sample, multi sample, multiple samples, sample integration, layer-based, split layers, JoinLayers, integrated UMAP, integrated.cca, integrated.rpca, harmony, anchors, ReadMtx, Read10X, GEO, R, scRNA-seq, single cell]
-produces: [umap_unintegrated_by_sample.png, umap_integrated_by_sample.png, umap_integrated_by_cluster.png, pca_elbow.png, seurat_integrated.rds]
+produces: [umap_unintegrated_by_sample.png, umap_integrated_by_sample.png, umap_integrated_by_cluster.png, pca_elbow.png, seurat_integrated.rds, seurat_integrated.lstar.zarr]
 domain: genomics
 resource_profile: "medium (~3–10 min for 2–6 samples × ~5–15k cells each; CCA scales with cell count, RPCA/Harmony faster)"
 source: "Seurat v5 layer-based integration vignette (Satija Lab) — satijalab.org/seurat/articles/integration_introduction; complemented by ?IntegrateLayers reference manual."
@@ -696,3 +696,19 @@ Summarize, in this order:
   scanpy session.
 - `scvi-integration` — atlas-scale deep-generative integration; preferred
   over `scVIIntegration` here when the user explicitly wants scVI / scANVI.
+
+## Offer an interactive view
+
+Write a viewer-optimized store DIRECTLY from the live Seurat object with lstar (pure R,
+highest fidelity — do NOT route through `.h5ad`) and **proactively offer to open it** (a
+required part of delivering the result):
+```r
+d <- lstar::read_seurat(obj)
+lstar::lstar_write_viewer(d, "seurat_integrated.lstar.zarr")   # precomputes DE / HVGs /
+                                                               # cell-major counts (optimized)
+```
+Then call `open_viewer(file_path="seurat_integrated.lstar.zarr")` and present the returned
+link so the user can check batch mixing and biology on the integrated UMAP in pagoda3 — it
+opens instantly (pre-optimized, no on-launch conversion). If `open_viewer` returns
+`ok:false`, relay the error rather than a dead link. Format / sharing →
+**`scrna-viewing-and-interchange`**.

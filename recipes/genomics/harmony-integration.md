@@ -5,7 +5,7 @@ when_to_use: Two or more scRNA-seq samples/conditions/donors (10x lanes, stim vs
 requires_tools: [run_r]
 capabilities_needed: [harmony, Seurat]
 keywords: [Harmony, RunHarmony, batch correction, batch integration, sample integration, group.by.vars, theta, sigma, lambda, Seurat, scRNA-seq, single cell, reduction harmony, UMAP, FindClusters, batch mixing, harmonypy, R]
-produces: [integrated_umap.png, harmony_clusters.csv, integrated.rds]
+produces: [integrated_umap.png, harmony_clusters.csv, integrated.rds, integrated.lstar.zarr]
 domain: genomics
 source: "Dave Tang's MUSE notes — Harmony integration with Seurat (R 4.5.0, Seurat 5.3.0, harmony 1.2.3): davetang.github.io/muse/harmony.html"
 ---
@@ -203,6 +203,21 @@ embedding is for neighbors/UMAP only).
 - **scvi-integration** — deep-generative (scVI) batch integration; prefer it over
   Harmony for very large atlases, complex/nested batch structure, or when a
   trained model is needed for label transfer (scANVI) or scVI-based DE.
+
+## Offer an interactive view
+
+Write a viewer-optimized store DIRECTLY from the live Seurat object with lstar (pure R,
+highest fidelity — do NOT route through `.h5ad`) and **proactively offer to open it** (a
+required part of delivering the result):
+```r
+d <- lstar::read_seurat(pbmc)
+lstar::lstar_write_viewer(d, "integrated.lstar.zarr")   # precomputes DE / HVGs / cell-major
+                                                        # counts so pagoda3 opens it optimized
+```
+Then call `open_viewer(file_path="integrated.lstar.zarr")` and present the returned link so
+the user can check batch mixing and biology on the UMAP in pagoda3 — it opens instantly
+(pre-optimized, no on-launch conversion). If `open_viewer` returns `ok:false`, relay the
+error rather than a dead link. Format / sharing → **`scrna-viewing-and-interchange`**.
 
 ## In ABA
 `ensure_capability("Seurat")` and `ensure_capability("harmony")`, then run every

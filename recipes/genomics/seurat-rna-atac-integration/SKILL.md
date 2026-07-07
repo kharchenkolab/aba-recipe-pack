@@ -6,7 +6,7 @@ invocation: interactive+batch
 requires_tools: [run_r]
 capabilities_needed: [Seurat, Signac]
 keywords: [multiome, 10x Multiome, scATAC, scATAC-seq, ATAC-seq, scRNA-seq, joint RNA ATAC, multimodal, WNN, weighted nearest neighbors, FindMultiModalNeighbors, ChromatinAssay, CreateChromatinAssay, Signac, RunTFIDF, RunSVD, LSI, GeneActivity, CoveragePlot, LinkPeaks, fragments, EnsDb, BSgenome, hg38, Seurat v5, R]
-produces: [umap_rna.png, umap_atac.png, umap_wnn.png, modality_weights.png, coverage_plot.png, multiome_processed.rds]
+produces: [umap_rna.png, umap_atac.png, umap_wnn.png, modality_weights.png, coverage_plot.png, multiome_processed.rds, multiome_processed.lstar.zarr]
 domain: genomics
 source: "Signac 'Joint RNA and ATAC analysis: 10x multiomic' vignette — stuartlab.org/signac/articles/pbmc_multiomic (Signac 1.17.0, Seurat 5.4.0). Stuart et al. Nat Methods 18, 1333–1341 (2021) for ChromatinAssay + LSI design."
 ---
@@ -627,3 +627,20 @@ Summarize:
 - **`seurat-de-testing`** — differential testing for cluster markers on the
   WNN joint clusters (FindMarkers / FindAllMarkers, with pseudobulk-DESeq2 for
   multi-sample condition effects).
+
+## Offer an interactive view
+
+Write a viewer-optimized store DIRECTLY from the live Seurat object with lstar (pure R,
+highest fidelity — do NOT route through `.h5ad`) and **proactively offer to open it** (a
+required part of delivering the result):
+```r
+DefaultAssay(obj) <- "RNA"        # RNA expression view; WNN clusters + modality weights ride along
+d <- lstar::read_seurat(obj)
+lstar::lstar_write_viewer(d, "multiome_processed.lstar.zarr")   # precomputes DE / HVGs /
+                                                               # cell-major counts (optimized)
+```
+Then call `open_viewer(file_path="multiome_processed.lstar.zarr")` and present the returned
+link so the user can explore the joint RNA+ATAC clusters on the WNN UMAP in pagoda3 — it
+opens instantly (pre-optimized, no on-launch conversion). If `open_viewer` returns
+`ok:false`, relay the error rather than a dead link. Format / sharing →
+**`scrna-viewing-and-interchange`**.

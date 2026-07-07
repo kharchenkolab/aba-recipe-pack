@@ -5,7 +5,7 @@ when_to_use: You have a saved/published scVI or scANVI reference model (your own
 requires_tools: [run_python]
 capabilities_needed: [scvi-tools, scanpy, anndata]
 keywords: [scArches, scvi-tools, reference mapping, query mapping, load_query_data, prepare_query_anndata, architectural surgery, transfer learning, weight_decay, atlas projection, label transfer, scvi-hub]
-produces: [query_latent.npy, query_predictions.csv, mapped_umap.png, query_model/]
+produces: [query_latent.npy, query_predictions.csv, mapped_umap.png, query_model/, query_mapped.lstar.zarr]
 domain: genomics
 source: "scvi-tools 1.3.3 tutorial — Reference mapping with SCVI-Tools / scArches (docs.scvi-tools.org/en/1.3.3/tutorials/notebooks/multimodal/scarches_scvi_tools.html)"
 ---
@@ -115,6 +115,20 @@ query.obsm["X_scANVI"] = scanvi_query.get_latent_representation()
 - Predicted labels are confined to the reference ontology — query-specific cell types
   get forced to the nearest reference label; flag low-confidence cells as possible
   novel populations.
+
+## Offer an interactive view
+
+`query_mapped.lstar.zarr` carries the mapped query cells + predicted labels + the shared
+embedding — write it and **proactively offer to open it**:
+```python
+import lstar
+lstar.write(lstar.read_anndata(query), "query_mapped.lstar.zarr", viewer=True)  # viewer@0.1: precomputes DE / HVGs / cell-major counts
+```
+Then call `open_viewer(file_path="query_mapped.lstar.zarr")` and present the returned link
+so the user can check where the query lands + its predicted labels on the UMAP in pagoda3 —
+it opens instantly (pre-optimized, no on-launch conversion, no node needed). Offer once,
+after you report the result. Keep raw counts in `query` (`.layers['counts']` / `.raw`) so
+precomputed stats use real counts. Format / sharing → **`scrna-viewing-and-interchange`**.
 
 ## Related
 - Build/own a reference: **scvi-integration**.

@@ -7,7 +7,7 @@ invocation: interactive+batch
 requires_tools: [run_r]
 capabilities_needed: [Seurat]
 keywords: [Seurat, Seurat v5, reference mapping, label transfer, FindTransferAnchors, TransferData, MapQuery, IntegrateEmbeddings, ProjectUMAP, query, reference, predicted.id, prediction.score, ref.umap, ref.pca, return.model, Azimuth, cell type annotation, atlas, R, scRNA-seq, single cell]
-produces: [umap_reference_celltype.png, umap_query_predicted.png, umap_reference_query_side_by_side.png, query_predicted_labels.csv, query_mapped.rds]
+produces: [umap_reference_celltype.png, umap_query_predicted.png, umap_reference_query_side_by_side.png, query_predicted_labels.csv, query_mapped.rds, query_mapped.lstar.zarr]
 domain: genomics
 resource_profile: "small (~1–5 min for a 5–20k cell query against a 10–50k cell reference); MapQuery memory ~scales with cells in query × ref PCs)"
 source: "Seurat v5 reference mapping vignette (Satija Lab) — satijalab.org/seurat/articles/integration_mapping; complemented by ?FindTransferAnchors, ?TransferData, ?MapQuery reference pages."
@@ -570,3 +570,18 @@ Summarize, in this order:
   alternative when no labeled reference exists.
 - Azimuth — see `references/azimuth_alternative.md` for pre-built
   tissue references that wrap this whole flow into one call.
+
+## Offer an interactive view
+
+Write a viewer-optimized store DIRECTLY from the live (mapped) Seurat object with lstar
+(pure R, highest fidelity — do NOT route through `.h5ad`) and **proactively offer to open
+it** (a required part of delivering the result):
+```r
+d <- lstar::read_seurat(query)
+lstar::lstar_write_viewer(d, "query_mapped.lstar.zarr")   # precomputes DE / HVGs /
+                                                          # cell-major counts (optimized)
+```
+Then call `open_viewer(file_path="query_mapped.lstar.zarr")` and present the returned link
+so the user can inspect the predicted cell types on the query UMAP in pagoda3 — it opens
+instantly (pre-optimized, no on-launch conversion). If `open_viewer` returns `ok:false`,
+relay the error rather than a dead link. Format / sharing → **`scrna-viewing-and-interchange`**.
