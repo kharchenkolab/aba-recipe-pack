@@ -1,6 +1,6 @@
 # Default policies the aba-recipes layer adds to the platform's defaults.
 # Merge semantics: `add:` unions, `disable:` drops, scalars highest-wins.
-# See misc/content_layers.md §5 in the platform repo.
+# Follows the platform's content-layer merge rules.
 #
 # At L-B (extraction time) this file is mostly empty — populated in L-C
 # when policies-merge machinery lands. Documented here so authors know

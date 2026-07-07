@@ -8,7 +8,7 @@ kind: knowhow_draft
 requires_tools: [Read]
 keywords: [view single cell, scRNA-seq viewer, interactive UMAP, explore clusters, expression browser, visualize cells, pagoda3, cellxgene, UCSC cell browser, h5ad, AnnData, lstar, lstar.zarr, zarr, RDS, Seurat, loom, interchange format, export single cell, share results, portability, save anndata, open viewer]
 domain: genomics
-source: "ABA viewer framework + pagoda3 integration (misc/pagoda3_integration.md); AnnData / .h5ad spec; lstar (L* Zarr interchange, lstar-sc on PyPI); cellxgene + CELLxGENE Census docs; pagoda2 export_and_interop reference (recipes/genomics/pagoda2-scrna-v2)."
+source: "ABA viewer framework + pagoda3 integration; AnnData / .h5ad spec; lstar (L* Zarr interchange, lstar-sc on PyPI); cellxgene + CELLxGENE Census docs; pagoda2 export_and_interop reference (recipes/genomics/pagoda2-scrna-v2)."
 audience: both
 ---
 
@@ -152,4 +152,4 @@ result, `write_h5ad`, hand off the file.
   the result" endpoint of that pipeline).
 - Recipes that produce a viewable object: `scrna-qc-clustering`, `bp-annotation`,
   `bp-clustering`, `scvi-integration`, `seurat-scrna-v2`.
-- `misc/pagoda3_integration.md` (ABA repo) — how the viewer + launcher are wired.
+- ABA's pagoda3 integration — how the viewer + launcher are wired.

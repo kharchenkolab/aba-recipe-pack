@@ -1,6 +1,6 @@
 # Reference-source catalog (`refsources/`)
 
-The install-modifiable data layer behind `fetch_reference` (misc/refs.md §5.1).
+The install-modifiable data layer behind `fetch_reference`.
 Each `*.yaml` here is a **provider manifest** telling the resolver *where* a
 standard reference (genome FASTA, annotation, transcriptome) or a **pre-built
 aligner index** lives, and how to turn a request

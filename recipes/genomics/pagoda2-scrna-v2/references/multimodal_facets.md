@@ -166,7 +166,7 @@ p2$runEmbedding(reduction = "WNN", name = "umap")        # UMAP on the joint red
 |---|---|---|
 | `runGraph` | `wnn` | **shipped** (default for ≥2 facets) |
 | `runReduction` | `concat`, `cca`, `scca` | **shipped** |
-| `runReduction` | LIGER/iNMF, MOFA+ | scoped, deferred (`misc/integration_methods_scoping.md`) |
+| `runReduction` | LIGER/iNMF, MOFA+ | scoped, deferred |
 | `runGraph` | SNF | scoped, deferred (O(n²), small-n niche) |
 | reduction | Schema | scoped, deferred (Python backend) |
 | — | MOFA | **not supported** |

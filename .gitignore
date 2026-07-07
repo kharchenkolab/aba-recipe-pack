@@ -7,3 +7,7 @@
 __pycache__/
 *.pyc
 .venv/
+
+# Recipe test-run artifacts (rendered notebooks, generated outputs, downloaded datasets)
+test-*/
+**/outputs/

@@ -10,7 +10,7 @@ operating skills; the cookbook lives here so it can evolve independently.
 
 ```
 .
-├── LICENSE                  Apache License 2.0
+├── LICENSE                  MIT License
 ├── NOTICE                   Third-party attributions (see "License" below)
 ├── CONTEXT.md               Prepended to the system prompt as the cookbook header
 ├── policies.yaml            Sandbox-preinstall lists, approval gates, runtime knobs
@@ -65,8 +65,8 @@ layers:
 ```
 
 ABA's skill loader walks layers in order. An optional *institution* layer
-can sit on top of this one to override recipes or add lab-specific ones —
-see `misc/content_layers.md` in the platform repo for the layering rules.
+can sit on top of this one to override recipes or add lab-specific ones,
+following the platform's content-layer ordering rules.
 
 ## Adding a recipe
 
@@ -97,7 +97,7 @@ Two patterns, both supported by the same loader:
 
 ## License
 
-Apache License, Version 2.0 — see `LICENSE`. Third-party attributions
+MIT License — see `LICENSE`. Third-party attributions
 (notably the upstream Biomni-derived material under
 `recipes/biomni-derived/` and `catalog/biomni-derived/`) are listed in
 `NOTICE`. Procedural bodies in this repo are written to use ABA's own
