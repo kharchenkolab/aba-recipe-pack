@@ -5,7 +5,7 @@ when_to_use: Multiple scRNA-seq samples/batches (donors, technologies, 10x lanes
 requires_tools: [run_python]
 capabilities_needed: [scvi-tools, scanpy, anndata]
 keywords: [scVI, scvi-tools, batch integration, batch correction, harmonization, latent representation, deep generative model, variational autoencoder, single cell, scRNA-seq, X_scVI, leiden, UMAP, donor effect]
-produces: [scvi_latent.npy, integrated_umap.png, leiden_clusters.csv, scvi_model/]
+produces: [scvi_latent.npy, integrated_umap.png, leiden_clusters.csv, scvi_model/, integrated.h5ad, integrated.lstar.zarr]
 domain: genomics
 source: "scvi-tools 1.3.3 tutorial — Atlas-level integration of lung data (docs.scvi-tools.org/en/1.3.3/tutorials/notebooks/scrna/harmonization.html)"
 ---

@@ -6,7 +6,7 @@ avoid_when: Do not use for multi-sample (cross-dataset) integration, trajectory 
 requires_tools: [run_r]
 capabilities_needed: [R, pagoda2-devel, ggplot2, hdf5r, data.table, R.utils, uwot, leidenAlg]
 keywords: [pagoda2, pagoda2.1, scRNA-seq, single cell RNA-seq, QC, filtering, variance normalization, overdispersed genes, PCA, UMAP, Leiden, markers, dotplot, heatmap, h5ad, h5Seurat, loom, 10x, CellRanger]
-produces: [qc_gene_molecule.png, qc_composition_violin.png, variance_qc.png, pca_elbow.png, umap_leiden.png, marker_dotplot.png, marker_heatmap_native.png, cluster_markers.csv, pagoda2_processed.rds, pagoda2_processed.h5ad]
+produces: [qc_gene_molecule.png, qc_composition_violin.png, variance_qc.png, pca_elbow.png, umap_leiden.png, marker_dotplot.png, marker_heatmap_native.png, cluster_markers.csv, pagoda2_processed.rds, pagoda2_processed.h5ad, pagoda2_processed.lstar.zarr]
 domain: genomics
 source: "Pagoda2.1 devel workflow based on doc/pagoda2.1-single-dataset.Rmd and source-verified pagoda2.1 R6 methods."
 ---

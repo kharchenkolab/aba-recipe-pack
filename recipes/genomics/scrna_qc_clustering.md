@@ -7,7 +7,7 @@ avoid_when: "Multiple samples/donors you intend to INTEGRATE jointly (use harmon
 requires_tools: [run_python]
 capabilities_needed: [scanpy, leidenalg]
 keywords: [scanpy, process, processing, preprocess, preprocessing, basic processing, standard scanpy pipeline, scanpy workflow, single cell, scRNA-seq, normalize, normalization, log1p, clustering, leiden, UMAP, PCA, highly variable genes, marker genes, cell QC, quality control, filtering, first-pass, end-to-end, pct_counts_mt, rank_genes_groups]
-produces: [qc_violins_pre.png, qc_scatters_pre.png, hvg_plot.png, pca_elbow.png, umap_clusters.png, markers_dotplot.png, markers_featureplot.png, cluster_markers.csv, processed.h5ad]
+produces: [qc_violins_pre.png, qc_scatters_pre.png, hvg_plot.png, pca_elbow.png, umap_clusters.png, markers_dotplot.png, markers_featureplot.png, cluster_markers.csv, processed.h5ad, processed.lstar.zarr]
 domain: genomics
 resource_profile: small-medium  (~30s for 10–50k cells)
 ---

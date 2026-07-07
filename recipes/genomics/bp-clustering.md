@@ -5,7 +5,7 @@ when_to_use: Use this for the clustering STAGE only when you want rigor beyond a
 requires_tools: [run_python]
 capabilities_needed: [scanpy, anndata, leidenalg, igraph]
 keywords: [clustering resolution sweep, cluster stability, sub-clustering, Leiden vs Louvain, multi-resolution scan, community detection rigor]
-produces: [adata_clustered.h5ad, leiden_umap.png]
+produces: [adata_clustered.h5ad, leiden_umap.png, clustered.lstar.zarr]
 domain: genomics
 source: "Single-cell Best Practices (Heumos et al.) — sc-best-practices.org/cellular_structure/clustering.html"
 ---

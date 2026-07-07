@@ -5,7 +5,7 @@ when_to_use: Use this for the cell-type annotation STAGE — assigning identitie
 requires_tools: [run_python]
 capabilities_needed: [scanpy, anndata, celltypist]
 keywords: [cell-type annotation, marker-based annotation, automated cell-type classification, CellTypist, reference mapping, label transfer, scArches, scANVI, score_genes, coarse-to-fine annotation]
-produces: [adata_annotated.h5ad, marker_dotplot.png, annotation.csv]
+produces: [adata_annotated.h5ad, marker_dotplot.png, annotation.csv, annotated.lstar.zarr]
 domain: genomics
 source: "Single-cell Best Practices (Heumos et al.) — sc-best-practices.org/cellular_structure/annotation.html"
 ---

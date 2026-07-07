@@ -5,7 +5,7 @@ when_to_use: Two or more scRNA-seq samples to integrate into one joint graph; wa
 requires_tools: [run_r]
 capabilities_needed: [conos, pagoda2, Matrix, igraph]
 keywords: [conos, integration, batch correction, multi-sample, joint graph, mNN, label propagation, leiden, scRNA-seq, kharchenkolab, R6]
-produces: [Conos object, joint clusters, joint 2D embedding, propagated labels, per-cluster markers, between-group DE tables]
+produces: [Conos object, joint clusters, joint 2D embedding, propagated labels, per-cluster markers, between-group DE tables, joint.lstar.zarr]
 domain: genomics
 source: github:kharchenkolab/conos + vignette https://github.com/kharchenkolab/conos/blob/main/doc/walkthrough.md
 ---
