@@ -136,7 +136,7 @@ model.save(os.path.join(DATA, "scvi_model"), overwrite=True)
   import lstar
   lstar.write(lstar.read_anndata(adata), "integrated.lstar.zarr", viewer=True)
   ```
-  **proactively offer** `open_viewer(file_path="integrated.lstar.zarr")` and present
+  **proactively offer** `get_viewer_url(path="integrated.lstar.zarr")` and present
   the link so the user can check batch mixing / biology on the UMAP — it opens
   instantly (pre-optimized, no on-launch conversion). Keep raw counts in adata so
   the precomputed stats use real counts. Format/sharing → **`scrna-viewing-and-interchange`**.

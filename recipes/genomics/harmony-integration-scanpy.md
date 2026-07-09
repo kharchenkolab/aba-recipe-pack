@@ -188,7 +188,7 @@ the result):
 import lstar
 lstar.write(lstar.read_anndata(adata), 'integrated.lstar.zarr', viewer=True)  # viewer@0.1: precomputes DE / HVGs / cell-major counts
 ```
-Then call `open_viewer(file_path='integrated.lstar.zarr')` and present the returned link
+Then call `get_viewer_url(path='integrated.lstar.zarr')` and present the returned link
 so the user can check batch mixing and biology on the UMAP in pagoda3 — it opens instantly
 (pre-optimized, no on-launch conversion, no node needed). Offer once, right after you
 report the result. Keep raw counts in `adata` (`.layers['counts']` or `.raw`) so the

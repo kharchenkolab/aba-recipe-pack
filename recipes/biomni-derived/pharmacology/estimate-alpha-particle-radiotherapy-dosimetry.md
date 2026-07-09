@@ -31,4 +31,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Physical decay only is applied here; biological clearance is folded into the measured biodistribution data.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "scipy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "scipy"])`. Original impl: `source` -> lift to lakeFS later.

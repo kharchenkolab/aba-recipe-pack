@@ -30,4 +30,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Initial parameter guesses `[50, 0.1, 50, 0.01]` suit typical mAb kinetics but may need adjustment for nanobodies or fragments.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "scipy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "scipy"])`. Original impl: `source` -> lift to lakeFS later.

@@ -105,7 +105,7 @@ embedding — write it and **proactively offer to open it**:
 import lstar
 lstar.write(lstar.read_anndata(adata), "scanvi_labeled.lstar.zarr", viewer=True)  # viewer@0.1: precomputes DE / HVGs / cell-major counts
 ```
-Then call `open_viewer(file_path="scanvi_labeled.lstar.zarr")` and present the returned
+Then call `get_viewer_url(path="scanvi_labeled.lstar.zarr")` and present the returned
 link so the user can inspect the predicted labels + confidence on the UMAP in pagoda3 —
 it opens instantly (pre-optimized, no on-launch conversion, no node needed). Offer once,
 after you report the result. Keep raw counts in `adata` (`.layers['counts']` / `.raw`) so

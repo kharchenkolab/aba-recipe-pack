@@ -32,4 +32,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Some sites require authentication or set cookies on first visit; this simple fetch will fail there.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("requests", "beautifulsoup4")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["requests", "beautifulsoup4"])`. Original impl: `source` -> lift to lakeFS later.

@@ -31,4 +31,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - fb_ace2 feedback parameter is accepted but not used in the current ODE formulation (present for API compatibility).
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "scipy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "scipy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

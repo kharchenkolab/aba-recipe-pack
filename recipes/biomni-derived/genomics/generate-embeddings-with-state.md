@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below �
 - Input matrix must be in CSR format and `adata.var` should have a `gene_name` column.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scanpy", "torch", "arc-state")`. Original impl: `biomni:tool/genomics.py::generate_embeddings_with_state` — lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scanpy", "torch", "arc-state"])`. Original impl: `biomni:tool/genomics.py::generate_embeddings_with_state` — lift to lakeFS later.

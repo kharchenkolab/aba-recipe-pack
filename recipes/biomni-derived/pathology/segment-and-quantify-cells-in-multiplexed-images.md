@@ -37,4 +37,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Very large images should be processed in tiles to avoid memory issues.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-image", "scipy", "numpy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-image", "scipy", "numpy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

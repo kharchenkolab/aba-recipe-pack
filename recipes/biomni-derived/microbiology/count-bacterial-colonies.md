@@ -36,4 +36,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Very dense plates (TNTC) will undercount due to merged watershed regions.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("opencv-python", "scipy", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["opencv-python", "scipy", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

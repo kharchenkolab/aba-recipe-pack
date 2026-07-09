@@ -29,7 +29,7 @@ There is nothing to install or export — three ways to open one:
 - **Files tab** — click the `.h5ad` / `.lstar.zarr` file; its viewer is pagoda3.
 - **Dataset card** — a dataset whose file is a single-cell object shows an
   **"↗ Explore in pagoda3"** button on its focus card.
-- **Ask Guide** — Guide can hand you a launch link directly (the `open_viewer`
+- **Ask Guide** — Guide can hand you a launch link directly (the `get_viewer_url`
   tool). This is the fastest path when you're already in chat.
 
 On first open ABA prepares the data store (a brief "preparing…" screen), then
@@ -37,11 +37,11 @@ loads the viewer; subsequent opens are instant (the prepared store is cached).
 
 **For the agent:** when you finish a single-cell analysis that yields a
 clustered or annotated object, *offer* to open it in pagoda3 — call
-`open_viewer(file_path="processed.h5ad")` (a bare filename is fine — it's resolved
-against the project's files) or `open_viewer(entity_id=…)` for a registered dataset,
+`get_viewer_url(path="processed.h5ad")` (a bare filename is fine — it's resolved
+against the project's files) or `get_viewer_url(entity_id=…)` for a registered dataset,
 then present the returned link. Offer this for single-cell result objects only;
 a figure or table already renders inside ABA and needs no viewer. What to point
-`open_viewer` at depends on the object:
+`get_viewer_url` at depends on the object:
 
 - **`.h5ad` / `.h5mu` / `.lstar.zarr`** — hand these to the viewer as-is. If the
   analysis was in R, prefer producing one of these from the live session (highest
@@ -51,11 +51,11 @@ a figure or table already renders inside ABA and needs no viewer. What to point
   R stack; if you just made the object in R, export `.h5ad`/`.lstar.zarr` in-session
   and point the viewer at that instead.
 - **pagoda2 / conos** — do **not** hand the raw pagoda2/conos `.rds` to the viewer
-  (lstar's converter reads only Seurat/SCE `.rds`). Point `open_viewer` at the
+  (lstar's converter reads only Seurat/SCE `.rds`). Point `get_viewer_url` at the
   `.h5ad` or `.lstar.zarr` the analysis writes from the live object (the pagoda2
   recipe already produces `pagoda2_processed.h5ad`; see "How to save / convert").
 
-Don't nag — offer once, when the result is ready. If `open_viewer` returns
+Don't nag — offer once, when the result is ready. If `get_viewer_url` returns
 `ok:false`, relay the error; never hand out a link that didn't resolve.
 
 ## Interchange formats — what to save
@@ -75,10 +75,10 @@ viewing matters.** `.lstar.zarr` is a good interchange target on its own merits
 
 ## How to save / convert
 
-**Preferred pattern — emit the viewer store IN-SESSION and point `open_viewer` at
+**Preferred pattern — emit the viewer store IN-SESSION and point `get_viewer_url` at
 it.** A recipe that just produced a result should write a *viewer-optimized*
 `.lstar.zarr` from the in-memory object at the end of the session, and offer
-`open_viewer(file_path="…​.lstar.zarr")`. Then the link opens instantly (already
+`get_viewer_url(path="…​.lstar.zarr")`. Then the link opens instantly (already
 optimized — no banner, no on-launch conversion) and it's highest-fidelity (built
 from the live object, using its raw counts). ABA *can* also convert an `.h5ad`/`.rds`
 on the fly when the user opens one directly — but that's the **fallback** for
@@ -121,7 +121,7 @@ namespace, but that alone spins up no Python env; the store path never calls int
 Python.)
 
 **On-the-fly `.rds` is a fallback, not the preferred path.** ABA *can* convert a
-Seurat/SCE `.rds` at viewer-launch (hand the `.rds` straight to `open_viewer`),
+Seurat/SCE `.rds` at viewer-launch (hand the `.rds` straight to `get_viewer_url`),
 but that path is a compromise for installs **without** the heavy R stack — it
 reads the serialized `.rds` without a full live session and is lower-fidelity
 than an in-session export. When you're already in R, export `.h5ad`/`.lstar.zarr`

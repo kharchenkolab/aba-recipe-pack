@@ -34,4 +34,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Pixel-unit outputs; calibrate to physical units using known pixel size (Âµm/px) if needed.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-image", "scipy", "numpy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-image", "scipy", "numpy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

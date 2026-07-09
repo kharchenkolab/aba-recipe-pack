@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below �
 - Genes with no isoforms under `max_sequence_length` produce no embedding.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("fair-esm", "torch", "numpy", "requests", "tqdm")`. Original impl: `biomni:tool/genomics.py::generate_gene_embeddings_with_ESM_models` — lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["fair-esm", "torch", "numpy", "requests", "tqdm"])`. Original impl: `biomni:tool/genomics.py::generate_gene_embeddings_with_ESM_models` — lift to lakeFS later.

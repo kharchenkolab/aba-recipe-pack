@@ -34,4 +34,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Polyfunctional analysis (IFN-Î³ AND IL-17 co-producers) requires a joint gate not present here.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("FlowCytometryTools", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["FlowCytometryTools", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

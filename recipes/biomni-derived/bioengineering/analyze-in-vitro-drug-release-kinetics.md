@@ -38,4 +38,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - `total_drug_loaded` should be measured experimentally; using max(concentration) as proxy assumes 100 % release was observed.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "scipy", "pandas", "matplotlib")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "scipy", "pandas", "matplotlib"])`. Original impl: `source` -> lift to lakeFS later.

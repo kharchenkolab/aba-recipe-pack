@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Genetic algorithm is more robust but slower for wide bounds.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scipy", "matplotlib", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scipy", "matplotlib", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

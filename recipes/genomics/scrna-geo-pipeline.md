@@ -52,6 +52,6 @@ Skip this orchestrator if the task is just one of the three stages — go straig
 
 When the processing stage finishes it writes `processed.lstar.zarr` (the `scrna-qc-clustering`
 sub-recipe does this) — **proactively offer the interactive view**: call
-`open_viewer(file_path='processed.lstar.zarr')` and present the link so the user can explore
+`get_viewer_url(path='processed.lstar.zarr')` and present the link so the user can explore
 clusters/markers in pagoda3, right after you report the result. Format / sharing →
 **`scrna-viewing-and-interchange`**.

@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - PyPDF2 can mis-order columns in multi-column papers; `pdfminer.six` handles layout better.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("requests", "PyPDF2")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["requests", "PyPDF2"])`. Original impl: `source` -> lift to lakeFS later.

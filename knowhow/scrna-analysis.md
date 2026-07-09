@@ -69,7 +69,7 @@ the recipe that executes it.
 | **11. Multimodal extensions** | CITE-seq? Multiome (RNA+ATAC)? Spatial? | Stage-specific knowhow (TBD; ask in chat) | `seurat-cite-seq`, `seurat-wnn-multimodal`, `seurat-rna-atac-integration` |
 | **12. Trajectory / pseudotime** | Monocle3, Slingshot, PAGA? | (knowhow TBD) | (recipe TBD) |
 | **13. Cell-cell communication** | CellChat, NicheNet, LIANA? | (knowhow TBD) | (recipe TBD) |
-| **14. View / share the result** | How do I explore it interactively? Which format to save / share / archive? | `scrna-viewing-and-interchange` | pagoda3 (built-in viewer); `open_viewer` |
+| **14. View / share the result** | How do I explore it interactively? Which format to save / share / archive? | `scrna-viewing-and-interchange` | pagoda3 (built-in viewer); `get_viewer_url` |
 
 For stages marked TBD, the depth doesn't yet exist in the catalogue. The
 agent should call this out to the user rather than improvising.

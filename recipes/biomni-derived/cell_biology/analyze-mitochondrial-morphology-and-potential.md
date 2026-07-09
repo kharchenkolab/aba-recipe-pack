@@ -37,4 +37,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Membrane-potential quantification is intensity-based and sensitive to photobleaching and staining variability.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-image", "opencv-python", "scipy", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-image", "opencv-python", "scipy", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

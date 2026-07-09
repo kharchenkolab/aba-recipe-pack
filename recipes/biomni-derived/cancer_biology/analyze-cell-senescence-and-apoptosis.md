@@ -34,4 +34,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Overlapping populations (senescent + apoptotic) are not cross-referenced.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("FlowCytometryTools", "numpy")`. Original impl: `biomni:tool/cancer_biology.py::analyze_cell_senescence_and_apoptosis` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["FlowCytometryTools", "numpy"])`. Original impl: `biomni:tool/cancer_biology.py::analyze_cell_senescence_and_apoptosis` -> lift to lakeFS later.

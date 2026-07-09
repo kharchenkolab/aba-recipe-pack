@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Particle size change is only modelled for solid dosage forms (detected via `dosage_form` field).
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

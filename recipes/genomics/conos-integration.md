@@ -182,6 +182,6 @@ chain — heatmaps render via `sccore`'s native grid engine.
 
 **Required final step — not optional.** After writing `joint.lstar.zarr`,
 **proactively offer to open it in ABA's interactive viewer** — call
-`open_viewer(file_path="joint.lstar.zarr")` and present the returned link in your
+`get_viewer_url(path="joint.lstar.zarr")` and present the returned link in your
 closing message. Point the viewer at the store (or an `.h5ad`), never the raw
-conos `.rds`. If `open_viewer` returns `ok:false`, relay the error.
+conos `.rds`. If `get_viewer_url` returns `ok:false`, relay the error.

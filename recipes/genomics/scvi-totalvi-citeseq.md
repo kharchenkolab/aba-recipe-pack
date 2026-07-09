@@ -113,7 +113,7 @@ import scanpy as sc, lstar
 sc.pp.neighbors(adata, use_rep="X_totalVI"); sc.tl.umap(adata)   # embedding for the viewer
 lstar.write(lstar.read_anndata(adata), "totalvi.lstar.zarr", viewer=True)  # RNA + denoised protein + latent
 ```
-Then call `open_viewer(file_path="totalvi.lstar.zarr")` and present the returned link so the
+Then call `get_viewer_url(path="totalvi.lstar.zarr")` and present the returned link so the
 user can explore RNA + surface-protein signal on the UMAP in pagoda3 — it opens instantly
 (pre-optimized, no on-launch conversion, no node needed). Offer once, after you report the
 result. Keep raw counts in `adata` (`.layers['counts']`) so precomputed stats use real

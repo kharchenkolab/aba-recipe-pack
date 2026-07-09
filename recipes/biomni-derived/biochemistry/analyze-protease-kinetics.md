@@ -31,4 +31,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Linear velocity estimation can fail if only very few early time points are available.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scipy", "matplotlib")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scipy", "matplotlib"])`. Original impl: `source` -> lift to lakeFS later.

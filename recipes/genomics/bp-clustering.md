@@ -66,7 +66,7 @@ it (opens instantly — pre-optimized, no on-launch conversion):
 import lstar
 lstar.write(lstar.read_anndata(adata), "clustered.lstar.zarr", viewer=True)  # viewer@0.1
 ```
-**proactively offer** `open_viewer(file_path="clustered.lstar.zarr")` and present the
+**proactively offer** `get_viewer_url(path="clustered.lstar.zarr")` and present the
 returned link so the user can explore clusters + markers in pagoda3 (offer it once,
 after reporting the result). Keep raw counts in adata so the precomputed stats use
 real counts. Format/sharing choices → **`scrna-viewing-and-interchange`**.

@@ -32,4 +32,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below �
 - Output must be passed to `map_to_ima_interpret_scrna` for cell-type interpretation.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("accelerate", "scanpy")`. Original impl: `biomni:tool/genomics.py::get_uce_embeddings_scRNA` — lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["accelerate", "scanpy"])`. Original impl: `biomni:tool/genomics.py::get_uce_embeddings_scRNA` — lift to lakeFS later.

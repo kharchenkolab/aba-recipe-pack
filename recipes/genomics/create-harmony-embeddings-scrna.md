@@ -62,5 +62,5 @@ plots) see **harmony-integration-scanpy**; for the R/Seurat counterpart see
 Once you've clustered on the corrected embedding, write a viewer-optimized store and
 **proactively offer** an interactive view —
 `lstar.write(lstar.read_anndata(adata), 'integrated.lstar.zarr', viewer=True)` then
-`open_viewer(file_path='integrated.lstar.zarr')` (see **harmony-integration-scanpy** →
+`get_viewer_url(path='integrated.lstar.zarr')` (see **harmony-integration-scanpy** →
 *Offer an interactive view*). Format / sharing → **`scrna-viewing-and-interchange`**.

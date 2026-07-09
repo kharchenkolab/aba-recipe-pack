@@ -111,7 +111,7 @@ it and **proactively offer to open it**:
 import lstar
 lstar.write(lstar.read_anndata(adata), "multivi.lstar.zarr", viewer=True)  # viewer@0.1: precomputes DE / HVGs / cell-major counts
 ```
-Then call `open_viewer(file_path="multivi.lstar.zarr")` and present the returned link so
+Then call `get_viewer_url(path="multivi.lstar.zarr")` and present the returned link so
 the user can explore the joint clusters + imputed expression on the UMAP in pagoda3 — it
 opens instantly (pre-optimized, no on-launch conversion, no node needed). Offer once, after
 you report the result. Keep raw counts in `adata` (`.layers['counts']`) so precomputed stats

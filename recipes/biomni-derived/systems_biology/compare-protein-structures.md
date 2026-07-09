@@ -32,4 +32,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Global RMSD reflects average alignment quality; local flexible regions are better assessed through per-residue distances.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("biopython", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["biopython", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

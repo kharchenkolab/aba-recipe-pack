@@ -37,4 +37,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Branching fiber networks are better analyzed with skeletonization (e.g., `skimage.morphology.skeletonize`) for total length rather than per-object major axis.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-image", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-image", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

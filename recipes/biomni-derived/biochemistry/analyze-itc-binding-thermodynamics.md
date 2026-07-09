@@ -31,4 +31,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - R (gas constant) is 1.9872 cal/(molÂ·K); dH and dG are in cal/mol, not kcal/mol.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "scipy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "scipy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

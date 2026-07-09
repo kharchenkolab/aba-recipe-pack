@@ -37,4 +37,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - The rule thresholds (1.2Ã— median, eccentricity 0.5) are heuristic and may need tuning per organism/magnification.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-image", "pandas", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-image", "pandas", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

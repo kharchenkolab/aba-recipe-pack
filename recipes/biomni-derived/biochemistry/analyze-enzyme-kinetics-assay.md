@@ -30,4 +30,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Noise level and kinetic constants are hard-coded defaults suitable only for demonstration.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "scipy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "scipy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

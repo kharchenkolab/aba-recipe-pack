@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Auto-diameter estimation can fail on very sparse or very dense images; provide explicit diameter when known.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("cellpose", "scikit-image", "matplotlib", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["cellpose", "scikit-image", "matplotlib", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

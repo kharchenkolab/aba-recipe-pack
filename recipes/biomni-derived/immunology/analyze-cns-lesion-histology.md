@@ -34,4 +34,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - GLCM is computed at 256 levels on full image; for large images this is memory-intensive.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-image", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-image", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

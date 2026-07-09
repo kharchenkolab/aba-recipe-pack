@@ -32,4 +32,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - If no countable dilutions are found, advise adjusting the dilution series.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

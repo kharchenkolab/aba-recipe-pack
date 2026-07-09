@@ -37,4 +37,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Pixel units are used throughout; supply a px-to-Âµm conversion factor externally if physical units are needed.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("opencv-python", "pandas", "scikit-learn", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["opencv-python", "pandas", "scikit-learn", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

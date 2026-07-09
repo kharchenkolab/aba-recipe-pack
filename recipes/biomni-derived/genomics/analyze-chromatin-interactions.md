@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below �
 - Large chromosomes at high resolution require substantial RAM.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("cooler", "numpy", "pandas", "scipy")`. Original impl: `biomni:tool/genomics.py::analyze_chromatin_interactions` — lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["cooler", "numpy", "pandas", "scipy"])`. Original impl: `biomni:tool/genomics.py::analyze_chromatin_interactions` — lift to lakeFS later.

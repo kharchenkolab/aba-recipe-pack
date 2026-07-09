@@ -32,4 +32,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Does not deconvolve mixed allele populations (heterozygous edits).
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("biopython", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["biopython", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

@@ -686,7 +686,7 @@ lstar.write(lstar.read_anndata(adata), 'processed.lstar.zarr', viewer=True)
 ### Offer an interactive view
 
 `processed.lstar.zarr` is a clustered, viewer-optimized single-cell result —
-**proactively offer to open it**: call `open_viewer(file_path='processed.lstar.zarr')`
+**proactively offer to open it**: call `get_viewer_url(path='processed.lstar.zarr')`
 and present the returned link (a launch button) so the user can explore the UMAP,
 markers, and metadata in pagoda3. It opens instantly (already optimized — no
 "Not viewer-optimized" banner, no per-launch conversion). Offer once, right after

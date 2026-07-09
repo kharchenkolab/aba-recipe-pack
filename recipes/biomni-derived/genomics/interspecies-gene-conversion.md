@@ -34,4 +34,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below �
 - Many-to-one or many-to-many orthologs are dropped; check the output for NaN values.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("pybiomart", "numpy", "pandas")`. Original impl: `biomni:tool/genomics.py::interspecies_gene_conversion` — lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["pybiomart", "numpy", "pandas"])`. Original impl: `biomni:tool/genomics.py::interspecies_gene_conversion` — lift to lakeFS later.

@@ -35,4 +35,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Text labels near bands can survive filtering; manual ROI review recommended.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("opencv-python", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["opencv-python", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

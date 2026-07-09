@@ -31,4 +31,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Fails silently if primers bind in the wrong orientation; always verify orientation before interpreting.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("biopython", "matplotlib", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["biopython", "matplotlib", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

@@ -35,4 +35,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Small sample sizes make Pearson correlations unreliable; check n before trusting edges.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("pandas", "scipy", "networkx", "gseapy")`. GraphML output can be stored as a browsable artifact. Original impl: `biomni:tool/cancer_biology.py::analyze_ddr_network_in_cancer` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["pandas", "scipy", "networkx", "gseapy"])`. GraphML output can be stored as a browsable artifact. Original impl: `biomni:tool/cancer_biology.py::analyze_ddr_network_in_cancer` -> lift to lakeFS later.

@@ -31,4 +31,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Crystal violet measures total biomass including dead cells; does not distinguish live from dead biofilm.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "pandas", "scipy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "pandas", "scipy"])`. Original impl: `source` -> lift to lakeFS later.

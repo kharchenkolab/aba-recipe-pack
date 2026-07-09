@@ -35,4 +35,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Thresholds should be validated against a pathologist-annotated ground truth before clinical use.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("opencv-python", "numpy", "scikit-image")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["opencv-python", "numpy", "scikit-image"])`. Original impl: `source` -> lift to lakeFS later.

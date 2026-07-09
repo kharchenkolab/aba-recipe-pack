@@ -36,4 +36,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Optimization may converge to a local minimum; consider multi-start with varied initials.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "scipy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "scipy"])`. Original impl: `source` -> lift to lakeFS later.

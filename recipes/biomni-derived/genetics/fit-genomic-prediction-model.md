@@ -39,4 +39,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Assumes markers are unfiltered and in HWE; pre-filter for MAF and missingness before calling.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "scipy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "scipy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

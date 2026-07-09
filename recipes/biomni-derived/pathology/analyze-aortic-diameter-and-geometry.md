@@ -35,4 +35,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Root/ascending landmark detection is purely geometric, not anatomy-aware.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("opencv-python", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["opencv-python", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

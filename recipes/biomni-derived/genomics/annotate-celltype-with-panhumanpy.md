@@ -32,4 +32,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below �
 - Large datasets need substantial RAM for ANN embedding.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("panhumanpy", "scanpy", "numpy")`. Original impl: `biomni:tool/genomics.py::annotate_celltype_with_panhumanpy` — lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["panhumanpy", "scanpy", "numpy"])`. Original impl: `biomni:tool/genomics.py::annotate_celltype_with_panhumanpy` — lift to lakeFS later.

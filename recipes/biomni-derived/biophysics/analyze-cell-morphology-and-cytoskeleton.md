@@ -34,4 +34,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Touching cells are not separated; watershed would improve cell count accuracy.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-image", "opencv-python", "pandas", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-image", "opencv-python", "pandas", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

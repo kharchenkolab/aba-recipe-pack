@@ -21,7 +21,7 @@ then **build a tree** from the alignment. The tree can come from a fast ML tool
 > aligner via `subprocess` and read its output with `Bio.AlignIO`.
 
 **Provision:** `ensure_capability("biopython")` and `ensure_capability("matplotlib")`
-(both pip). For the aligner/tree binaries, find them with `search_bioconda`, then
+(both pip). For the aligner/tree binaries, find them with `search_registry(source='bioconda')`, then
 `propose_capability` + `ensure_capability` (all on the bioconda channel):
 - aligner: `mafft` (recommended, robust `--auto`) or `muscle` (v5).
 - ML tree (optional): `fasttree` (fast) or `iqtree` (model selection + bootstrap).
@@ -149,6 +149,6 @@ fig.savefig(png, dpi=150, bbox_inches="tight")
 ## In ABA
 Implement with `run_python`. `ensure_capability("biopython")` +
 `ensure_capability("matplotlib")`; provision the aligner (and optional ML tree
-tool) from bioconda via `search_bioconda` → `propose_capability` →
+tool) from bioconda via `search_registry(source='bioconda')` → `propose_capability` →
 `ensure_capability`. Write `alignment.fasta` to the work dir and `tree.nwk` /
 `tree.png` under `ARTIFACTS_DIR`.

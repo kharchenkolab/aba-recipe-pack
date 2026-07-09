@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Assumes balanced time points across subjects; missing data may skew statistics.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("matplotlib", "statsmodels", "scipy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["matplotlib", "statsmodels", "scipy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - The filename is taken from the last URL segment â€” may collide if multiple files share a name.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("requests", "beautifulsoup4")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["requests", "beautifulsoup4"])`. Original impl: `source` -> lift to lakeFS later.

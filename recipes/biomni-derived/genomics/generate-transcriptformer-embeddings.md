@@ -37,4 +37,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below �
 - GPU required for practical throughput.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("transcriptformer", "scanpy", "torch", "pandas")`. Original impl: `biomni:tool/genomics.py::generate_transcriptformer_embeddings` — lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["transcriptformer", "scanpy", "torch", "pandas"])`. Original impl: `biomni:tool/genomics.py::generate_transcriptformer_embeddings` — lift to lakeFS later.

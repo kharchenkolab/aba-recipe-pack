@@ -34,4 +34,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Large loci (>5k variants) will be slow on CPU; consider GPU or reducing region.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("torch", "scipy", "pandas", "matplotlib")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["torch", "scipy", "pandas", "matplotlib"])`. Original impl: `source` -> lift to lakeFS later.

@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Results pickle includes the fitted models; reload for inference on new data without retraining.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-learn", "pykalman", "matplotlib", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-learn", "pykalman", "matplotlib", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

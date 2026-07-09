@@ -35,4 +35,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - OD readings above ~0.8 are non-linear with cell density; advise dilution if needed.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "scipy", "pandas", "matplotlib")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "scipy", "pandas", "matplotlib"])`. Original impl: `source` -> lift to lakeFS later.

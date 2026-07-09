@@ -34,4 +34,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Standard curve must be acquired under identical reagent conditions; date-matching with sample batch is important.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

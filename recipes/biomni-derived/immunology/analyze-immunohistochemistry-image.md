@@ -34,4 +34,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Large high-resolution whole-slide images should be tiled before processing.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-image", "numpy", "scipy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-image", "numpy", "scipy"])`. Original impl: `source` -> lift to lakeFS later.

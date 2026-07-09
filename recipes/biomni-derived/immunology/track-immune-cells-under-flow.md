@@ -37,4 +37,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Trackpy `link` is single-processor; large datasets may be slow.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("opencv-python", "numpy", "pandas", "trackpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["opencv-python", "numpy", "pandas", "trackpy"])`. Original impl: `source` -> lift to lakeFS later.

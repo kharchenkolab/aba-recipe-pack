@@ -432,11 +432,11 @@ d <- lstar::read_pagoda2(p2)                              # live Pagoda2 -> lsta
 lstar::lstar_write_viewer(d, "pagoda2_processed.lstar.zarr")   # viewer@0.1 (precomputed)
 ```
 
-Then **call `open_viewer(file_path="pagoda2_processed.lstar.zarr")`** and present the
+Then **call `get_viewer_url(path="pagoda2_processed.lstar.zarr")`** and present the
 link in your closing message — it opens instantly (pre-optimized, no on-launch
 conversion). Point the viewer at the **`.lstar.zarr`** (or the native `.h5ad`),
 **not** the pagoda2 `.rds`: ABA's on-launch converter reads only Seurat/SCE `.rds`,
-so a raw pagoda2 object won't open. If `open_viewer` returns `ok:false`, relay the
+so a raw pagoda2 object won't open. If `get_viewer_url` returns `ok:false`, relay the
 error rather than handing out a dead link.
 
 For metadata resolution and export semantics, read

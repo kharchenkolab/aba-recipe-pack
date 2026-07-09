@@ -34,4 +34,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below �
 - Only coarse cell types are available in the reference (`coarse_cell_type_yanay` column).
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-learn", "scanpy", "numpy")`. Original impl: `biomni:tool/genomics.py::map_to_ima_interpret_scRNA` — lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-learn", "scanpy", "numpy"])`. Original impl: `biomni:tool/genomics.py::map_to_ima_interpret_scRNA` — lift to lakeFS later.

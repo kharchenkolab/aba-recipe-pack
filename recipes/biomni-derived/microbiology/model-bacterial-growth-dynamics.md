@@ -30,4 +30,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Does not model antibiotic pharmacokinetics; for drug effects, add an explicit kill term.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scipy", "numpy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scipy", "numpy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

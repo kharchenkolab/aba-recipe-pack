@@ -776,15 +776,15 @@ lstar::lstar_write_viewer(d, "seurat_processed.lstar.zarr")   # viewer=TRUE: pre
 # lstar_write() also works but leaves the store un-optimized.
 ```
 
-Then **call `open_viewer(file_path="seurat_processed.lstar.zarr")` and present the
+Then **call `get_viewer_url(path="seurat_processed.lstar.zarr")` and present the
 returned link in your closing message** — a required part of delivering the result,
 not optional. Notes:
-- You *can* instead hand `open_viewer` the `seurat_processed.rds` directly (ABA
+- You *can* instead hand `get_viewer_url` the `seurat_processed.rds` directly (ABA
   converts on launch), but that's a lower-fidelity fallback for installs without
   the R stack — prefer the in-session `.lstar.zarr`.
 - Export `.h5ad` only when the target is a *different* tool (scanpy, cellxgene),
   never as the route to the ABA viewer.
-- If `open_viewer` returns `ok:false`, relay the error rather than handing out a
+- If `get_viewer_url` returns `ok:false`, relay the error rather than handing out a
   dead link.
 
 The `.rds` carries the full `RNA` assay (counts, data, scale.data layers), the
@@ -867,7 +867,7 @@ Summarize:
   any cluster with zero markers
 - figures shown to the user (filenames)
 - saved files (`seurat_processed.rds`, `cluster_markers.csv`, `seurat_processed.lstar.zarr`)
-- **the interactive viewer link** from Step 8 (`open_viewer` on the
+- **the interactive viewer link** from Step 8 (`get_viewer_url` on the
   `.lstar.zarr`) — always include it; if you couldn't produce one, say why
 - caveats: doublet detection not run, batch effects (single-sample so
   irrelevant unless the sample is itself a multiplexed pool), weak markers,

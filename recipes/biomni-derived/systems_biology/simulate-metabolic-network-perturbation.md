@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Large models may be slow; consider reducing network scope or using a dedicated kinetic modeling tool (COPASI, tellurium).
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("cobra", "numpy", "scipy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["cobra", "numpy", "scipy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

@@ -30,4 +30,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - pyscreener requires ADFR Suite / Vina binary in PATH.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("pyscreener", "autodock-vina", "PyTDC")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["pyscreener", "autodock-vina", "PyTDC"])`. Original impl: `source` -> lift to lakeFS later.

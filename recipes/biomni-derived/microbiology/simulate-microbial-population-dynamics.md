@@ -36,4 +36,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - No inter-species interactions (competition, predation) are modelled; use gLV ODE recipe for community interactions.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "scipy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "scipy"])`. Original impl: `source` -> lift to lakeFS later.

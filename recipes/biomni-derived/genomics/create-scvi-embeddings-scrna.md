@@ -73,4 +73,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below �
   log-normalized data to scVI.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scvi-tools", "scanpy")`. Original impl: `biomni:tool/genomics.py::create_scvi_embeddings_scRNA` — lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scvi-tools", "scanpy"])`. Original impl: `biomni:tool/genomics.py::create_scvi_embeddings_scRNA` — lift to lakeFS later.

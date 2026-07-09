@@ -558,7 +558,7 @@ d <- lstar::read_seurat(obj)
 lstar::lstar_write_viewer(d, "cite_processed.lstar.zarr")   # precomputes DE / HVGs /
                                                             # cell-major counts (optimized)
 ```
-Then call `open_viewer(file_path="cite_processed.lstar.zarr")` and present the returned link
+Then call `get_viewer_url(path="cite_processed.lstar.zarr")` and present the returned link
 so the user can explore the RNA clusters + metadata on the UMAP in pagoda3 — it opens
-instantly (pre-optimized, no on-launch conversion). If `open_viewer` returns `ok:false`,
+instantly (pre-optimized, no on-launch conversion). If `get_viewer_url` returns `ok:false`,
 relay the error rather than a dead link. Format / sharing → **`scrna-viewing-and-interchange`**.

@@ -30,4 +30,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Output poses are in the container-internal `/home/appuser/output` which is bind-mounted locally.
 
 ## In ABA
-Implement with `run_python` (subprocess calls to docker); `ensure_capability("docker", "diffdock-container")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python` (subprocess calls to docker); `ensure_capability(["docker", "diffdock-container"])`. Original impl: `source` -> lift to lakeFS later.

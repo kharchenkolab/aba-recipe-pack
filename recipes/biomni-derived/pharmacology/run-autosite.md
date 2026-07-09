@@ -30,4 +30,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - For multi-chain or unusual PDB files, `prepare_receptor` may fail; clean PDB first.
 
 ## In ABA
-Implement with `run_python` (subprocess); `ensure_capability("adfr-suite", "autosite")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python` (subprocess); `ensure_capability(["adfr-suite", "autosite"])`. Original impl: `source` -> lift to lakeFS later.

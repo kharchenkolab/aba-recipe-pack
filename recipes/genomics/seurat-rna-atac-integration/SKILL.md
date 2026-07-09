@@ -639,8 +639,8 @@ d <- lstar::read_seurat(obj)
 lstar::lstar_write_viewer(d, "multiome_processed.lstar.zarr")   # precomputes DE / HVGs /
                                                                # cell-major counts (optimized)
 ```
-Then call `open_viewer(file_path="multiome_processed.lstar.zarr")` and present the returned
+Then call `get_viewer_url(path="multiome_processed.lstar.zarr")` and present the returned
 link so the user can explore the joint RNA+ATAC clusters on the WNN UMAP in pagoda3 — it
-opens instantly (pre-optimized, no on-launch conversion). If `open_viewer` returns
+opens instantly (pre-optimized, no on-launch conversion). If `get_viewer_url` returns
 `ok:false`, relay the error rather than a dead link. Format / sharing →
 **`scrna-viewing-and-interchange`**.

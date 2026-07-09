@@ -38,4 +38,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Directionality ratio is undefined for stationary cells (path_length â‰ˆ 0); guard with epsilon check.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("trackpy", "scikit-image", "matplotlib")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["trackpy", "scikit-image", "matplotlib"])`. Original impl: `source` -> lift to lakeFS later.

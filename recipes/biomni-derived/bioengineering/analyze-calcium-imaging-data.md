@@ -38,4 +38,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - 20th-percentile baseline can be biased in highly active neurons; consider using a rolling minimum instead.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-image", "scipy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-image", "scipy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

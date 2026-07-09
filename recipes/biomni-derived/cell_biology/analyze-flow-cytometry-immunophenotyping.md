@@ -34,4 +34,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - No transformation (log, logicle) is applied; for low-signal channels this may compress separation.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("FlowCytometryTools", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["FlowCytometryTools", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

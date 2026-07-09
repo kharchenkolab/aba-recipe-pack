@@ -36,4 +36,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Division index underestimates if cells die after dividing (dead cells not counted in lower generations).
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("FlowCytometryTools", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["FlowCytometryTools", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

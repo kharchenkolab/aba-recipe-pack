@@ -38,4 +38,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Large volumes require sufficient RAM; consider downsampling or chunked processing for whole-bone scans.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-image", "scipy", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-image", "scipy", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

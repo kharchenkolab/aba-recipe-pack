@@ -31,4 +31,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Large sequences (whole chromosomes) may be slow; consider segmenting.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("biopython", "requests")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["biopython", "requests"])`. Original impl: `source` -> lift to lakeFS later.

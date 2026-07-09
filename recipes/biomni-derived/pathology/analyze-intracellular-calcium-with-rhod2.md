@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Image registration between background/control/sample frames is not performed; co-registration may be needed for moving cells.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("opencv-python", "numpy", "matplotlib")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["opencv-python", "numpy", "matplotlib"])`. Original impl: `source` -> lift to lakeFS later.

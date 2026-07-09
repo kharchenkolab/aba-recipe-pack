@@ -39,4 +39,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below �
 - Orientation output is in radians (−π/2 to π/2 range from skimage conventions).
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("scikit-image", "pandas", "numpy")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["scikit-image", "pandas", "numpy"])`. Original impl: `source` -> lift to lakeFS later.

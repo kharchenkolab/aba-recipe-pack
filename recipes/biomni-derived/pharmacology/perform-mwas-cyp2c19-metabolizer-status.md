@@ -31,4 +31,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Covariates (age, sex, cell-type composition) are essential to avoid confounding but are optional in this implementation.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("pandas", "scipy", "statsmodels")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["pandas", "scipy", "statsmodels"])`. Original impl: `source` -> lift to lakeFS later.

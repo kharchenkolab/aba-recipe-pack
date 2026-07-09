@@ -33,4 +33,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - Seropositivity cut-offs (e.g. VCA-IgG > 20 U/mL) are not applied here; add clinical interpretation thresholds separately.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("numpy", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["numpy", "pandas"])`. Original impl: `source` -> lift to lakeFS later.

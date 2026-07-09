@@ -34,4 +34,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - COSMIC/ClinVar annotation requires locally downloaded database files.
 
 ## In ABA
-Implement with `run_python` (subprocess calls to CLI tools); `ensure_capability("samtools", "bcftools", "lumpy")`. Original impl: `biomni:tool/cancer_biology.py::detect_and_characterize_structural_variations` -> lift to lakeFS later.
+Implement with `run_python` (subprocess calls to CLI tools); `ensure_capability(["samtools", "bcftools", "lumpy"])`. Original impl: `biomni:tool/cancer_biology.py::detect_and_characterize_structural_variations` -> lift to lakeFS later.

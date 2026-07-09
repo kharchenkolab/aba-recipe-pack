@@ -30,4 +30,4 @@ Distilled from a biomni implementation. In ABA, implement with the tools below â
 - FCS channel names must match exactly the string passed as `fluorescence_parameter`.
 
 ## In ABA
-Implement with `run_python`; `ensure_capability("flowkit", "pandas")`. Original impl: `source` -> lift to lakeFS later.
+Implement with `run_python`; `ensure_capability(["flowkit", "pandas"])`. Original impl: `source` -> lift to lakeFS later.
