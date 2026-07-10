@@ -63,8 +63,9 @@ def geo_supp_files(acc):
            f"?acc={acc}&targ=self&form=text&view=quick")
     txt = urllib.request.urlopen(url, timeout=60).read().decode("utf-8", "replace")
     # GSM lines are !Sample_supplementary_file_N ; GSE lines are !Series_supplementary_file_N.
-    # Keep the native ftp:// scheme — see Step 2's comment for why we no longer
-    # rewrite it to https://.
+    # GEO hands back ftp:// URLs. Do NOT pin a scheme here — Step 2 measures both
+    # against this host and downloads over whichever is actually faster from where
+    # you are running.
     return re.findall(r"^![A-Za-z]+_supplementary_file_\d+\s*=\s*(\S+)", txt, re.M)
 
 acc = "GSM5746259"                       # GSM… (one sample) or GSE… (series)
@@ -81,83 +82,129 @@ it lists **none** → resolve the parent series (`!Sample_series_id`) and grab t
 series supplementary, falling back to `GSE…_RAW.tar` **only as a last resort** —
 and then stream it and extract just this sample's members, not the whole archive.
 
-## Step 2 — download the listed files to disk (parallel, ftp://)
+## Step 2 — download the listed files (verify every byte; probe the transport)
+
+Two rules here, both learned the hard way.
+
+**1. Never trust `curl`'s exit code alone.** A transfer cut mid-stream — a
+`--max-time` cutoff, or an FTP data channel the server closes cleanly — leaves a
+*partial* file on disk. `returncode == 0` does **not** mean "complete", and
+`os.path.getsize() > 0` is not a completeness check. A truncated `matrix.mtx.gz`
+sails through as ✓ and only detonates later inside `gzip` or `sc.read_mtx`, far from
+the cause. Check the byte count against the server's advertised size, and
+decompress-test every `.gz`. **A short file is a FAILED download** — delete it and
+retry on the other scheme. This is the single most important thing in this recipe.
+
+**2. Don't hardcode `ftp://` or `https://`.** Which is faster depends entirely on the
+network you are on. Same 47 MB `matrix.mtx.gz` on `ftp.ncbi.nlm.nih.gov`, single stream:
+
+| where | `ftp://` | `https://` |
+|---|---|---|
+| VBC compute node (2026-07) | 3.8 MB/s | **20.6 MB/s** |
+| household connection (2026-06) | **~6 MB/s** | ~0.4 MB/s (HTTPS throttled) |
+
+Both are real; neither generalizes. So **probe**: race the two schemes on the
+smallest file (a ~37 KB `barcodes.tsv.gz` — under a second either way), pull the rest
+over the winner, and fall back per-file to the loser on any failure or truncation.
 
 ```python
-import os, subprocess, time
+import os, re, gzip, time, subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
-os.makedirs("./geo_data", exist_ok=True)
 
-# Transport choice — measured 2026-06 on ftp.ncbi.nlm.nih.gov:
-#   ftp://  6-way parallel:  ~13s for a 2-sample (83 MB) 10x triplet
-#   https:// 6-way parallel: ~55s for the same payload
-# NCBI throttles HTTPS to ~400 KB/s per connection under contention; the
-# ftp:// frontend doesn't (~6 MB/s sustained). The historical "ftp is slow"
-# advice is no longer true here. KEEP the native ftp:// URLs Step 1 returned;
-# fall back to https:// PER FILE if ftp:// errors (covers FTP server outages
-# without sinking the whole batch).
-#
-# No `-C -` (resume) on the first attempt: a partial file left by a cancelled
-# prior run triggers `HTTP 416 → curl rc=33`. Reserve `-C -` for an explicit
-# retry branch (or just rm -f the partial and re-download).
+DEST = "./geo_data"; os.makedirs(DEST, exist_ok=True)
 
-PER_FILE_TIMEOUT = 120   # a 50 MB file at NCBI's slowest measured rate is <60s;
-                         # 120 is forgiving but fails fast on a genuine stall
-                         # instead of sitting silent for 10 minutes.
+# Generous: with completeness verified below, a timeout no longer silently truncates —
+# it fails, deletes the partial, and retries the other scheme. Tight timeouts used to be
+# a defence against silent stalls; verification is a better one.
+PER_FILE_TIMEOUT = 300
 
-def _fetch(url, timeout=PER_FILE_TIMEOUT):
-    """Returns (dst, ok, dt, err). Tries ftp:// first; on any failure falls
-    back to https:// for that one file."""
-    dst = os.path.join("./geo_data", os.path.basename(url))
-    t0 = time.time()
-    r = subprocess.run(["curl", "-fsS", "--max-time", str(timeout), "-o", dst, url],
+def _as(url, scheme):
+    """Same host + path, other scheme."""
+    return re.sub(r"^(?:ftp|https)://", scheme + "://", url)
+
+def _remote_size(url, timeout=30):
+    """Server-advertised size: Content-Length (https) or SIZE (ftp). None if unknown."""
+    r = subprocess.run(["curl", "-fsSIL", "--max-time", str(timeout), url],
                        capture_output=True, text=True)
-    if r.returncode == 0:
-        return dst, True, time.time() - t0, ""
-    # ftp:// failed — try https:// fallback for this one URL
-    url_https = url.replace("ftp://ftp.ncbi.nlm.nih.gov",
-                            "https://ftp.ncbi.nlm.nih.gov")
-    if url_https != url:
-        r2 = subprocess.run(["curl", "-fsSL", "--max-time", str(timeout * 2),
-                             "-o", dst, url_https], capture_output=True, text=True)
-        if r2.returncode == 0:
-            return dst, True, time.time() - t0, "(https fallback)"
-        err = r2.stderr.strip()
-    else:
-        err = r.stderr.strip()
-    return dst, False, time.time() - t0, err[:200]
+    m = re.search(r"(?im)^content-length:\s*(\d+)", r.stdout) if r.returncode == 0 else None
+    return int(m.group(1)) if m else None
 
-# Print the plan UP FRONT so a slow start is obvious immediately, rather than
-# silence followed by a single dump at the end.
-print(f"Fetching {len(files)} file(s) into ./geo_data — expect ~"
-      f"{max(2, len(files)*2)}-15s over ftp://ftp.ncbi.nlm.nih.gov.", flush=True)
+def _complete(dst, expect):
+    """Complete iff the byte count matches AND (for .gz) it inflates to the end.
+    This is what catches silent truncation."""
+    if not os.path.exists(dst) or os.path.getsize(dst) == 0:
+        return False
+    if expect is not None and os.path.getsize(dst) != expect:
+        return False
+    if dst.endswith(".gz"):
+        try:
+            with gzip.open(dst, "rb") as fh:
+                while fh.read(1 << 20):
+                    pass                     # raises on truncation / bad CRC
+        except Exception:
+            return False
+    return True
 
+def _curl(url, dst, timeout):
+    # No `-C -` (resume) on a fresh download: a partial left by a cancelled prior run
+    # triggers `HTTP 416 -> curl rc=33`. We overwrite, and verify afterwards.
+    return subprocess.run(["curl", "-fsSL", "--max-time", str(timeout), "-o", dst, url],
+                          capture_output=True, text=True).returncode == 0
+
+def _fetch(url, scheme, timeout=PER_FILE_TIMEOUT):
+    """Download over `scheme`; on failure OR truncation retry the other scheme.
+    Never leaves a partial file behind. Returns (dst, ok, dt, note)."""
+    dst = os.path.join(DEST, os.path.basename(url))
+    t0, other = time.time(), ("https" if scheme == "ftp" else "ftp")
+    for sch in (scheme, other):
+        u = _as(url, sch)
+        if _curl(u, dst, timeout) and _complete(dst, _remote_size(u)):
+            return dst, True, time.time() - t0, ("" if sch == scheme else f"({sch} fallback)")
+        if os.path.exists(dst):
+            os.remove(dst)                   # a partial must never reach Step 3
+    return dst, False, time.time() - t0, "failed or truncated on both ftp:// and https://"
+
+# --- probe: race the schemes on the SMALLEST file, keep the winner ---------------
+sizes = {u: (_remote_size(_as(u, "https")) or 1 << 60) for u in files}
+probe  = min(sizes, key=sizes.get)
+timing = {}
+for sch in ("https", "ftp"):
+    t0 = time.time()
+    timing[sch] = (time.time() - t0) if _curl(_as(probe, sch), "/tmp/_geo_probe.bin", 60) else float("inf")
+os.path.exists("/tmp/_geo_probe.bin") and os.remove("/tmp/_geo_probe.bin")
+scheme = min(timing, key=timing.get)
+if timing[scheme] == float("inf"):
+    raise RuntimeError("neither ftp:// nor https:// reached ftp.ncbi.nlm.nih.gov")
+print("transport probe on %s (%.0f KB): %s -> using %s://"
+      % (os.path.basename(probe), sizes[probe] / 1e3,
+         ", ".join("%s=%.2fs" % (s, t) for s, t in timing.items()), scheme), flush=True)
+
+# Print as files land — six silent curls behind a join look identical to a hang.
+print(f"Fetching {len(files)} file(s) into {DEST} over {scheme}://", flush=True)
 with ThreadPoolExecutor(max_workers=min(6, len(files))) as ex:
-    futs = {ex.submit(_fetch, u): u for u in files}
-    done, total_bytes = 0, 0
+    futs = {ex.submit(_fetch, u, scheme): u for u in files}
+    done, total = 0, 0
     for fut in as_completed(futs):
-        dst, ok, dt, msg = fut.result()
+        dst, ok, dt, note = fut.result()
         done += 1
         sz = os.path.getsize(dst) if os.path.exists(dst) else 0
-        total_bytes += sz
-        mark = "✓" if ok else "✗"
-        suffix = f"  {msg}" if msg else ""
-        print(f"  [{done}/{len(files)}] {mark} {os.path.basename(dst)}  "
-              f"{sz/1e6:.1f} MB in {dt:.1f}s{suffix}", flush=True)
+        total += sz
+        print(f"  [{done}/{len(files)}] {'✓' if ok else '✗'} {os.path.basename(dst)}  "
+              f"{sz/1e6:.1f} MB in {dt:.1f}s {note}", flush=True)
         if not ok:
-            raise RuntimeError(f"download failed for {dst}: {msg}")
+            raise RuntimeError(f"download failed for {dst}: {note}")
 
-print(f"Done — {total_bytes/1e6:.1f} MB total.", flush=True)
+print(f"Done — {total/1e6:.1f} MB, every file size- and gzip-verified.", flush=True)
 ```
 
-Per-sample 10x triplets are 30–100 MB (`matrix.mtx.gz` dominates); the parallel
-ftp:// fetch above completes in tens of seconds even on a household connection.
+Per-sample 10x triplets are 30–100 MB (`matrix.mtx.gz` dominates); the parallel fetch
+above lands in tens of seconds on either transport.
 **For larger archives** — `GSE…_RAW.tar` is often multi-GB — run as a background
 job, write to a durable path, stream (`requests.get(stream=True)` +
 `iter_content`) rather than buffering in the kernel, and `tar.extract()` only
 the members whose names start with your `GSM…` prefix. That's the *one*
-legitimate place to use `curl -C -` (resume on an interrupted multi-GB pull). Verify each file exists and is
-non-empty before loading.
+legitimate place to use `curl -C -` (resume on an interrupted multi-GB pull) — and
+still verify the final size against `Content-Length` before extracting.
 
 ## Step 3 — load by branch
 
@@ -229,13 +276,20 @@ meta = pd.DataFrame({g: s.metadata for g, s in gse.gsms.items()}).T
 - 10x triplets are commonly prefixed per sample and need regrouping (Step 3a).
 - `features.tsv.gz` vs legacy `genes.tsv.gz`; CellRanger v2 vs v3 layouts differ.
 - Flat tables: check separator (`\t` vs `,`) and orientation before trusting it.
-- **Use `ftp://` for NCBI supplementary files, not `https://`.** Measured
-  2026-06: ftp:// to `ftp.ncbi.nlm.nih.gov` runs ~6 MB/s sustained even on a
-  household connection; HTTPS to the same host throttles each connection to
-  ~400 KB/s under contention. A 6-way parallel 2-sample 10x fetch is ~13s
-  over ftp vs ~55s over https. The old "ftp:// is slow/flaky" lore was
-  written against a different NCBI; today it's inverted. Step 2 keeps ftp://
-  and falls back to https:// per-file if a single ftp transfer errors.
+- **A download is not "done" because curl exited 0 — verify it.** Truncated
+  `.gz` files are the #1 way this recipe wastes an hour: `curl` returns 0 (or is cut
+  by `--max-time`), the partial file looks plausible, and the failure surfaces much
+  later as a `gzip`/`sc.read_mtx` error that reads like corrupt *data* rather than an
+  incomplete *download*. Always compare against the server's `Content-Length`/FTP
+  `SIZE` and inflate-test `.gz` files (Step 2's `_complete()`), delete partials, and
+  retry on the other scheme.
+- **Neither `ftp://` nor `https://` is universally faster — probe.** Same 47 MB file
+  on `ftp.ncbi.nlm.nih.gov`: from a VBC compute node https is ~5x faster
+  (20.6 vs 3.8 MB/s, 2026-07); from a household line ftp was ~15x faster
+  (~6 MB/s vs ~0.4 MB/s throttled, 2026-06). Both measurements are real. Step 2
+  races the two on the smallest file and uses the winner, so it self-tunes per site
+  instead of encoding one network's result as universal advice. Symptom of getting
+  this wrong: downloads that crawl or stall for minutes.
 - **Don't use `curl -C -` on a fresh download.** Triggers `HTTP 416 → curl rc=33`
   when a partial file from a cancelled prior run is on disk. Reserve `-C -` for
   an explicit retry on the multi-GB `_RAW.tar` path only.
@@ -246,9 +300,12 @@ meta = pd.DataFrame({g: s.metadata for g, s in gse.gsms.items()}).T
   `matrix.mtx.gz` is still streaming). If you write your own loop, do the
   same — never bury a parallel fetch behind `ex.map` + a single end-of-batch
   log.
-- **Per-file timeout should be tight (≤120s for a 50 MB file).** Long
-  timeouts (`--max-time 600`) hide stalls behind silence; short ones surface
-  them as fast failures the recipe can retry/fall back on.
+- **Per-file timeout is a backstop, not a correctness check.** A short `--max-time`
+  used to be the defence against a silent stall, but it *causes* the truncation above:
+  curl is killed mid-stream and leaves a plausible-looking partial. Now that Step 2
+  verifies completeness and deletes partials, prefer a generous timeout (300s) and let
+  verification catch the bad transfer. Keep the per-file progress prints for the
+  heartbeat.
 - Some series only deposit RDS/Seurat objects → note it; FASTQ path may be cleaner.
 - `GEOparse` caches SOFT files in `destdir`; reuse it to avoid refetching metadata.
 
