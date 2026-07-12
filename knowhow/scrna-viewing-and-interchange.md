@@ -35,11 +35,16 @@ There is nothing to install or export — three ways to open one:
 On first open ABA prepares the data store (a brief "preparing…" screen), then
 loads the viewer; subsequent opens are instant (the prepared store is cached).
 
-**For the agent:** when you finish a single-cell analysis that yields a
-clustered or annotated object, *offer* to open it in pagoda3 — call
-`get_viewer_url(path="processed.h5ad")` (a bare filename is fine — it's resolved
-against the project's files) or `get_viewer_url(entity_id=…)` for a registered dataset,
-then present the returned link. Offer this for single-cell result objects only;
+**For the agent:** producing a clustered / annotated / integrated single-cell
+object? Handing over the view link is a **closing step of the analysis itself,
+not an optional follow-on.** In the **same turn** you write the result — before you
+summarize or suggest a next sample — call `get_viewer_url(path="processed.h5ad")`
+(a bare filename is fine — it's resolved against the project's files) or
+`get_viewer_url(entity_id=…)` for a registered dataset, then present the returned
+link. Do **not** wait to be asked, and do **not** let it drop because your plan's
+last step was named "markers" or "save": writing the result and offering the view
+are one gesture, and this offer is part of the recipe's contract (not scope creep to
+skip at the plan's end). Offer this for single-cell result objects only;
 a figure or table already renders inside ABA and needs no viewer. What to point
 `get_viewer_url` at depends on the object:
 
