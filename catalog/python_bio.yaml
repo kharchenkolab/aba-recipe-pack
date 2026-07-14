@@ -8,6 +8,16 @@
 # that clearly rather than failing opaquely.
 capabilities:
   # --- pip-materializable (library) ---
+  - name: lstar
+    version: "latest"
+    archetype: library
+    domain_tags: [single-cell, viewer, pagoda3, zarr, interchange, conversion, lstar]
+    summary: "Uniform data model + 'Zarr' interchange for single-cell omics (the lstar-sc package; import name `lstar`). Writes the viewer-optimized .lstar.zarr store the pagoda3 viewer reads. Ships in the core base env; catalogued so ensure_capability('lstar') resolves it directly instead of matching a same-named unrelated package on PyPI/CRAN."
+    provisioning: {pip: ["lstar-sc"]}
+    import_name: lstar
+    scope: system
+    status: published
+
   - name: gseapy
     version: "1.1.3"
     archetype: library
