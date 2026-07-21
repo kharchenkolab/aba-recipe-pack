@@ -48,6 +48,7 @@ the QC'd object — but feed it **raw counts**, not log-normalized scaled data.
 
 ```python
 import scvi, scanpy as sc, anndata as ad, pandas as pd, numpy as np, os
+# Find registered inputs by name: find_files('<name>') / list_data_files() returns the real path — don't guess a storage root.
 DATA = os.environ["DATA_DIR"]
 
 # 0) Load. If you already have a QC'd object, just read it:

@@ -71,8 +71,9 @@ import scanpy as sc, anndata as ad, pandas as pd, os
 import matplotlib.pyplot as plt
 sc.settings.figdir = '.'            # harvested cwd, not figures/
 
-# 1. Load each sample and CONCAT with a batch key. Files live under DATA_DIR
-#    (get the path from list_data_files; do NOT guess WORK_DIR).
+# 1. Load each sample and CONCAT with a batch key. Refer to inputs by name —
+#    find_files('<name>') locates a file wherever it lives (list_data_files to
+#    list what's registered); do NOT guess a storage root.
 D = os.environ['DATA_DIR']
 #  (a) Standard CellRanger DIR per sample (barcodes/features/matrix.mtx[.gz] inside):
 #      a = sc.read_10x_mtx(f"{D}/{sample_dir}", var_names='gene_symbols')

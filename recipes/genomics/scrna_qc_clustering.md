@@ -270,8 +270,9 @@ is silent, the global defaults apply.
 
 ### 1. Load the counts matrix
 
-Files live under `DATA_DIR` — get the path from `list_data_files()`; do NOT
-guess. Two common 10x layouts:
+Refer to inputs by name — `find_files('<name>')` locates a file wherever it
+lives (`list_data_files()` lists what's registered); do NOT guess a storage
+root. Two common 10x layouts:
 
 ```python
 import os, scanpy as sc, pandas as pd

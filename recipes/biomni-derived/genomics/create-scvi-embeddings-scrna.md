@@ -20,6 +20,7 @@ Distilled from a biomni implementation. In ABA, implement with the tools below �
    read the parts EXPLICITLY and concat MULTIPLE samples with a batch key:
    ```python
    import scanpy as sc, pandas as pd, anndata as ad, os
+   # Find registered inputs by name: find_files('<name>') / list_data_files() returns the real path — don't guess a storage root.
    D = os.environ["DATA_DIR"]
    def load_geo_10x(prefix):                       # one GEO loose, GSM-prefixed triplet
        a = sc.read_mtx(f"{D}/{prefix}.matrix.mtx.gz").T          # mtx is genes×cells → transpose

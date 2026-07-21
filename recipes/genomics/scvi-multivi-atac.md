@@ -29,6 +29,7 @@ into this layout and tags each cell's `modality`:
 
 ```python
 import scvi, scanpy as sc, os
+# Find registered inputs by name: find_files('<name>') / list_data_files() returns the real path — don't guess a storage root.
 DATA = os.environ["DATA_DIR"]
 
 paired   = sc.read_h5ad(os.path.join(DATA, "multiome_paired.h5ad"))   # genes+peaks

@@ -44,6 +44,7 @@ is exactly where an advisor should walk the user through the options:
 
 ```r
 library(limma); library(edgeR)
+# Find registered inputs by name: find_files("<name>") / list_data_files() returns the real path — don't guess a storage root.
 cts     <- as.matrix(read.csv(file.path(Sys.getenv("DATA_DIR"), "counts.csv"), row.names = 1))  # genes × samples
 targets <- read.csv(file.path(Sys.getenv("DATA_DIR"), "samples.csv"), row.names = 1)            # samples × factors
 group   <- factor(targets$condition)

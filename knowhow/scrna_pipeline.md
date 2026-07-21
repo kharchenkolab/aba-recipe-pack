@@ -1,3 +1,6 @@
+---
+name: scrna-pipeline
+---
 # scRNA-seq — principles + where the canonical flow lives
 
 The executable single-cell QC + first-pass clustering pipeline is the

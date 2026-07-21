@@ -42,6 +42,7 @@ advantage over scanpy's `rank_genes_groups` when batch structure is present.
 
 ```python
 import scvi, scanpy as sc, os
+# Find registered inputs by name: find_files('<name>') / list_data_files() returns the real path — don't guess a storage root.
 DATA = os.environ["DATA_DIR"]
 
 adata = sc.read_h5ad(os.path.join(DATA, "qc_filtered.h5ad"))

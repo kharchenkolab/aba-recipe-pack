@@ -57,6 +57,7 @@ the sequences first — a tree needs **>= 3**.
 import os, subprocess, tempfile
 from Bio import SeqIO, AlignIO, Phylo
 
+# Find registered inputs by name: find_files('proteins.fasta') / list_data_files() returns the real path — don't guess a storage root.
 fasta_path = os.path.join(os.environ["DATA_DIR"], "proteins.fasta")  # or write a passed string
 n = sum(1 for _ in SeqIO.parse(fasta_path, "fasta"))
 assert n >= 3, f"need >= 3 sequences to build a tree, got {n}"
