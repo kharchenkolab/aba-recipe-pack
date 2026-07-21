@@ -49,6 +49,7 @@ from pydeseq2.dds import DeseqDataSet
 from pydeseq2.ds import DeseqStats
 from pydeseq2.default_inference import DefaultInference
 
+# Find registered inputs by name: find_files('<name>') / list_data_files() returns the real path — don't guess a storage root.
 counts = pd.read_csv(f"{DATA_DIR}/counts.csv", index_col=0)        # genes × samples on disk…
 counts = counts.T                                                 # → samples × genes for pydeseq2
 counts = counts.loc[:, counts.sum(axis=0) >= 10]                  # drop ~zero genes

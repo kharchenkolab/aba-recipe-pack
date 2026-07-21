@@ -29,6 +29,7 @@ this way (hub models generally are).
 
 ```python
 import scvi, scanpy as sc, os
+# Find registered inputs by name: find_files('<name>') / list_data_files() returns the real path — don't guess a storage root.
 DATA = os.environ["DATA_DIR"]
 
 ref = sc.read_h5ad(os.path.join(DATA, "reference.h5ad"))

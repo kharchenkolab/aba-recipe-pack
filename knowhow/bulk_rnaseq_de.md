@@ -1,3 +1,6 @@
+---
+name: bulk-rnaseq-de
+---
 # Bulk RNA-seq DE pipeline (pydeseq2)
 
 Reference for differential expression between two groups in a bulk RNA-seq
