@@ -12,7 +12,7 @@ capabilities:
     version: "latest"
     archetype: library
     domain_tags: [single-cell, viewer, pagoda3, zarr, interchange, conversion, lstar]
-    summary: "Uniform data model + 'Zarr' interchange for single-cell omics (the lstar-sc package; import name `lstar`). Writes the viewer-optimized .lstar.zarr store the pagoda3 viewer reads. Ships in the core base env; catalogued so ensure_capability('lstar') resolves it directly instead of matching a same-named unrelated package on PyPI/CRAN."
+    summary: "Uniform data model + 'Zarr' interchange for single-cell omics (the lstar-sc package; import name `lstar`). Writes the viewer-optimized .lstar.zarr store the pagoda3 viewer reads. Ships in the core base env; catalogued so ensure_capability('lstar') resolves it directly instead of matching a same-named unrelated package on PyPI/CRAN. WORKING IN R? Do NOT bridge to this package from R — reticulate is not the route. Save the object (`saveRDS`) and hand the .rds path to `get_viewer_url`: the platform runs lstar's own R bridge (Seurat / SingleCellExperiment / pagoda2 / conos) for you, and the conversion happens outside your session. This entry describes the PYTHON side only; there is no supported in-session R import."
     provisioning: {pip: ["lstar-sc"]}
     import_name: lstar
     scope: system
