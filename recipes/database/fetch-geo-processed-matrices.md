@@ -2,7 +2,7 @@
 name: fetch-geo-processed-matrices
 description: Download processed/supplementary files (count matrices) for a GEO series or sample — 10x mtx triplets, h5/h5ad, or per-sample count tables — and load them for analysis.
 when_to_use: You have a KNOWN GEO accession (GSE… or GSM…) and want either (a) its already-processed expression data — count matrices, not raw FASTQ — or (b) just to LIST the study's samples (GSM accessions) + per-sample metadata/characteristics. For a known accession use THIS recipe (it has the GEOparse sample table), not query-geo (which only searches for studies and can't list a series' real per-sample roster). Fast path for scRNA-seq / bulk RNA-seq when authors deposited matrices; try it BEFORE the FASTQ/realignment path.
-requires_tools: [run_python]
+requires_tools: [run_python, register_dataset]
 capabilities_needed: [GEOparse, pandas, scanpy, anndata]
 keywords: [GEO, GSE, GSM, count matrix, supplementary files, 10x, mtx, barcodes, features, h5ad, h5, processed data, expression matrix, scRNA-seq, bulk RNA-seq, download]
 produces: [downloaded supplementary files on disk, loaded AnnData / count matrix, sample metadata table]
@@ -22,13 +22,17 @@ series has no usable processed matrices, or the user explicitly needs raw reads.
 If the user asked to *download* (and/or *register*) the data, fetch the
 supplementary files, register them as a dataset, and stop — the files are the
 deliverable. Load into **AnnData only when the NEXT step is actual analysis**
-(clustering/DE). And **don't merge multiple samples into one object unless asked**:
+(clustering/DE) — and on that path **still register first**: what you fetched is the
+subject of the analysis, so it needs a dataset entity before you analyze, not instead
+of it. Either way registration is `register_dataset`, one entity spanning the files.
+And **don't merge multiple samples into one object unless asked**:
 "register them together" means one dataset entity spanning the files, not a single
 merged `.h5ad`. Converting/merging by default discards the raw files the user
 wanted and bakes in choices they didn't make.
 
-`run_python` only; `ensure_capability("GEOparse")` and (`scanpy`/`anndata` for
-loading 10x/h5ad, `pandas` for plain tables).
+`run_python` for the fetch/load; `register_dataset` for the files you pulled;
+`ensure_capability("GEOparse")` and (`scanpy`/`anndata` for loading 10x/h5ad,
+`pandas` for plain tables).
 
 ## Decision point — what kind of processed file is here?
 
