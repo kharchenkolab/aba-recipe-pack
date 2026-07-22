@@ -60,17 +60,35 @@ GB — it bundles every sample) unless the GSM genuinely lists no files.
 Reliable, GEOparse-free listing — parses the SOFT text directly, so it works for a
 GSM *or* a GSE even when GEOparse raises (it can, on some records):
 
+**Retry this call.** NCBI closes a small fraction of connections without a response
+(`http.client.RemoteDisconnected`). Measured against this endpoint: roughly 1 request
+in 15–40, independent of User-Agent and of whether the process is warm — a plain
+transient, not a block. A single unretried call therefore fails often enough to be a
+recurring interruption (five sessions in ten days, every one of them recovered by an
+agent hand-writing the same back-off). It is already handled for you below; do not
+re-derive it.
+
 ```python
-import urllib.request, re
-def geo_supp_files(acc):
+import urllib.request, re, time
+
+def geo_supp_files(acc, retries=4):
     url = (f"https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi"
            f"?acc={acc}&targ=self&form=text&view=quick")
-    txt = urllib.request.urlopen(url, timeout=60).read().decode("utf-8", "replace")
-    # GSM lines are !Sample_supplementary_file_N ; GSE lines are !Series_supplementary_file_N.
-    # GEO hands back ftp:// URLs. Do NOT pin a scheme here — Step 2 measures both
-    # against this host and downloads over whichever is actually faster from where
-    # you are running.
-    return re.findall(r"^![A-Za-z]+_supplementary_file_\d+\s*=\s*(\S+)", txt, re.M)
+    req = urllib.request.Request(
+        url, headers={"User-Agent": "aba/0.1 (bioinformatics; +GEO fetch)"})
+    last = None
+    for i in range(retries):
+        try:
+            txt = urllib.request.urlopen(req, timeout=60).read().decode("utf-8", "replace")
+            # GSM lines are !Sample_supplementary_file_N ; GSE lines are
+            # !Series_supplementary_file_N. GEO hands back ftp:// URLs. Do NOT pin a
+            # scheme here — Step 2 measures both against this host and downloads over
+            # whichever is actually faster from where you are running.
+            return re.findall(r"^![A-Za-z]+_supplementary_file_\d+\s*=\s*(\S+)", txt, re.M)
+        except Exception as e:                      # transient drop / timeout
+            last = e
+            time.sleep(1.5 * (i + 1))               # 1.5s, 3s, 4.5s
+    raise RuntimeError(f"GEO metadata for {acc} unreachable after {retries} tries: {last!r}")
 
 acc = "GSM5746259"                       # GSM… (one sample) or GSE… (series)
 files = geo_supp_files(acc)
@@ -199,7 +217,18 @@ with ThreadPoolExecutor(max_workers=min(6, len(files))) as ex:
             raise RuntimeError(f"download failed for {dst}: {note}")
 
 print(f"Done — {total/1e6:.1f} MB, every file size- and gzip-verified.", flush=True)
+print("ABSOLUTE dataset path (register THIS):", os.path.abspath(DEST), flush=True)
 ```
+
+**Register the absolute path, not `./geo_data/<acc>`.** You verified the copy at
+`os.path.abspath(DEST)`; that is the one to register, and passing it verbatim removes
+any question of which directory a bare name resolves to. A relative name is resolved
+against the sandboxes the platform knows about, and a same-named directory left by an
+earlier session is a real possibility — in 2026-07 exactly that adopted a two-day-old
+partial download of the same accession while the freshly verified copy sat untouched,
+costing two agents four minutes of diagnosing "a corrupt GEO file" that was intact at
+GEO. The platform now prefers your own sandbox and warns when a registered member does
+not decompress; naming the absolute path skips the question entirely.
 
 Per-sample 10x triplets are 30–100 MB (`matrix.mtx.gz` dominates); the parallel fetch
 above lands in tens of seconds on either transport.
